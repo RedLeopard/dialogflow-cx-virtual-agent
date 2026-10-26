@@ -1,0 +1,11 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+*service-account*.json
+*credentials*.json
+.venv/
+venv/
+__pycache__/
+*.pyc
+node_modules/
