@@ -1,6 +1,6 @@
-# CSD Dialogflow CX
+# Dialogflow CX Virtual Agent
 
-A conversational customer experience project for Cloud Systems Direct, built with Google Cloud Dialogflow CX.
+A conversational customer experience project for a cloud consulting business, built with Google Cloud Dialogflow CX.
 
 ## Purpose
 
