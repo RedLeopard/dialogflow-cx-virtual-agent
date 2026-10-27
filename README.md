@@ -189,3 +189,61 @@ Next priorities:
 6. Add confirmed customer message capture, Twilio voice, and grounded answers from approved service information.
 
 Public-facing branding will remain independent of Cloud Systems Direct.
+
+## Progress Update: October 27, 2026 - Twilio Voice and Contact Intake
+
+This checkpoint supersedes earlier voice-integration status and branding plans. The phone experience will identify the company as **Cloud Systems Direct**, as requested during live-call review. Earlier sections remain as project history.
+
+### Completed Configuration
+
+- Exported and reviewed the current Dialogflow JSON package, then committed it under `dialogflow/agent/` in commit `fd28aa5`.
+- Added `.gcloudignore` and excluded local `backups/` from Git and Cloud Run source uploads.
+- Enabled the Cloud Resource Manager API and granted Twilio's documented production service account the Dialogflow API Reader and Dialogflow API Client roles in the CX project.
+- Created Default Start Flow version `1`, named `consultation-v1`, and deployed it to the `production` environment.
+- Created the native Twilio connector `cx-phone`, using English, the default bot voice, and sentiment analysis enabled. No status callback URL is configured, and no sentiment-based routing or response logic exists.
+- Changed the existing Twilio number's incoming voice routing from its forwarding Function to the generated `cx-phone` Studio Flow. The existing forwarding Functions remain available for rollback. Messaging configuration was left unchanged.
+
+### First Call Findings and Welcome Fix
+
+The first call reached Studio and the connector but disconnected with Twilio error `32601`. Dialogflow reported that no handler existed for the event `Default Welcome Intent`. The connector field had been set to the intent's display name, which Twilio sent as an event; an intent route alone did not handle that event.
+
+Added a matching `Default Welcome Intent` event handler to the Draft start flow using a targeted REST PATCH, preserving the existing routes and fallback handlers. The PATCH response confirmed the new handler.
+
+**Deployment boundary:** creation of `consultation-v2` and promotion of the welcome fix to `production` have not been confirmed. A later call was reported to have an unsatisfactory voice and greeting, but its exact deployed version and complete conversation outcome were not verified. Do not treat voice acceptance testing as passed.
+
+The exported configuration at `fd28aa5` predates the welcome event patch. Re-export and commit the updated configuration after the next verified deployment.
+
+### Agreed Next Experience: Company Greeting and Contact Intake
+
+Before project discovery, the phone conversation should:
+
+1. Identify Cloud Systems Direct and introduce the virtual assistant.
+2. Ask for the caller's name.
+3. Use the incoming caller number from Twilio when available, after explicitly passing it into Dialogflow session parameters and verifying the mapping.
+4. Ask whether the calling number is the best callback number.
+5. If it is not, or caller ID is unavailable, collect an alternative and read it back for confirmation.
+6. Ask what the caller needs and continue into project discovery.
+
+Proposed opening:
+
+> Thanks for calling Cloud Systems Direct. I'm your virtual assistant. Before we get started, may I have your name?
+
+Then confirm the preferred callback number and ask:
+
+> What can we help you with today?
+
+Name capture, caller-number mapping, callback confirmation, and the improved greeting are **planned, not implemented**. Caller ID is a callback candidate, not verified identity. Callback confirmation is separate from explicit SMS permission.
+
+### Next Implementation and Verification
+
+1. Inspect the current Draft and production versions to resolve the welcome-fix deployment state.
+2. Select and audition a more natural supported voice; the default voice has not met the caller-experience requirement.
+3. Implement the company greeting and contact-intake pages, including corrections, unavailable caller ID, and alternative callback numbers.
+4. Publish the intended flow version to `production`, then test the actual phone path through greeting, contact confirmation, discovery, follow-up, and ending.
+5. Re-export the deployed configuration and update the checkpoint notes.
+6. Incorporate follow-up answers into structured discovery and summaries, expand service categories, and improve failure/retry handling.
+7. Add confirmed Firestore persistence, then explicit SMS permission and booking-link delivery.
+
+Firestore, SMS sending, confirmed customer message capture, and grounded service answers remain unimplemented. The console displayed an A2P 10DLC registration requirement for US messaging; verify registration readiness before implementing US SMS delivery. The agent must not claim that details were saved, a text delivered, or an appointment booked without a confirmed backend result.
+
+Detailed resume checkpoint: [Project notes](docs/project-notes.md).
