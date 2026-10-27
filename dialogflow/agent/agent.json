@@ -1,0 +1,14 @@
+{
+  "displayName": "CSD Dialogflow CX",
+  "defaultLanguageCode": "en",
+  "timeZone": "America/Chicago",
+  "description": "Cloud Systems Direct virtual agent for service inquiries, consultation requests, and customer support.",
+  "projectNumber": 543178244618,
+  "startFlow": "Default Start Flow",
+  "enableStackdriverLogging": true,
+  "advancedSettings": {
+    "loggingSettings": {
+      "enableStackdriverLogging": true
+    }
+  }
+}

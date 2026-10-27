@@ -1,0 +1,13 @@
+.gcloudignore
+.git
+.gitignore
+#!include:.gitignore
+.venv/
+.env
+.env.*
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Local agent backups
+backups/

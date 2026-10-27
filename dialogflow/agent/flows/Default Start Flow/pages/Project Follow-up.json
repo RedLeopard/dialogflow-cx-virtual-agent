@@ -1,0 +1,30 @@
+{
+  "name": "042e5a98-8d04-4aa1-b0fd-e60259e8a06e",
+  "displayName": "Project Follow-up",
+  "form": {
+    "parameters": [ {
+      "displayName": "project_follow_up",
+      "required": true,
+      "entityType": "@sys.any",
+      "fillBehavior": {
+        "initialPromptFulfillment": {
+          "webhook": "Project Discovery Backend",
+          "tag": "discover-project"
+        }
+      }
+    } ]
+  },
+  "transitionRoutes": [ {
+    "condition": "$page.params.status = \"FINAL\"",
+    "triggerFulfillment": {
+      "messages": [ {
+        "text": {
+          "text": [ "Thank you for the additional details. You can choose an available time for a 30-minute consultation here: https://calendly.com/cloudsystems/30-minute-consultation" ]
+        },
+        "languageCode": "en"
+      } ]
+    },
+    "targetPage": "End Session",
+    "name": "73e76e10-568f-4645-b1e7-1b079f292bb6"
+  } ]
+}

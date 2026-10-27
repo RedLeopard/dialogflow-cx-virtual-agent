@@ -1,0 +1,11 @@
+{
+  "name": "5879f51c-273a-4fac-beb8-d387062098b4",
+  "displayName": "Project Discovery Backend",
+  "genericWebService": {
+    "uri": "https://cx-backend-543178244618.us-central1.run.app/webhook",
+    "serviceAgentAuth": "ID_TOKEN"
+  },
+  "timeout": {
+    "seconds": 30
+  }
+}
