@@ -132,3 +132,60 @@ Dialogflow CX and backend validation will control actions. Generated responses w
 Test realistic conversations, including corrections, interruptions, unclear requests, declined SMS permission, and backend failures.
 
 Measure task completion, extraction accuracy, grounded-answer quality, response time, and cost per conversation. Protect customer information, authenticate backend requests, secure API credentials, and prevent duplicate actions when requests are retried.
+
+## Progress Update: October 27, 2026
+
+This update records the latest tested milestone. Earlier milestone descriptions and planning sections above are retained as project history; Vertex AI discovery and the Cloud Run backend are now implemented as described below.
+
+### Milestone 2: Authenticated Project Discovery
+
+Built and deployed a Python fulfillment backend, connected it to Dialogflow CX, and manually tested the complete consultation conversation through the detectIntent API.
+
+Completed backend and deployment work:
+
+- Added structured project extraction and follow-up question generation in `backend/discovery.py` using Gemini `gemini-3.5-flash` through Vertex AI's global endpoint.
+- Added FastAPI `/health` and `/webhook` endpoints in `backend/main.py`, with input validation and discovery failure responses.
+- Pinned tested dependencies in `requirements.txt`.
+- Added a Python 3.14 Dockerfile that runs the backend as a non-root user.
+- Added Docker and Google Cloud source-upload exclusions.
+- Built the container locally and verified its health endpoint.
+- Deployed the backend to Cloud Run in `us-central1`, with authentication required, a dedicated runtime service account, and scaling configured from zero to two instances.
+- Granted the runtime service account Vertex AI access and the Dialogflow service agent permission to invoke the Cloud Run service.
+- Registered the Project Discovery Backend webhook with service-agent ID-token authentication and a 30-second timeout.
+
+### Tested Conversation
+
+1. The customer requests a consultation.
+2. The Consultation Request page captures `project_needs`.
+3. The conversation transitions to the new Project Follow-up page.
+4. Its form prompt invokes the backend using the `discover-project` fulfillment tag.
+5. Gemini extracts project type, current and target platforms, customer problem, timeline, requirements, and a summary, then asks one relevant follow-up question.
+6. Dialogflow captures the answer as `project_follow_up`.
+7. The agent provides the Calendly booking link and transitions to `END_SESSION`.
+
+A manual migration scenario confirmed AWS-to-Google-Cloud extraction, website instability, a relative timeline, and the customer's no-downtime requirement. The Dialogflow webhook returned HTTP 200 in approximately 4.4 seconds. The next turn captured WordPress, EC2, and MySQL details in `project_follow_up`, returned the booking link, and ended the session.
+
+### Current Boundaries
+
+- The follow-up answer is stored separately in session parameters; it is not yet incorporated into the generated discovery summary.
+- `discovery_status: complete` indicates successful initial extraction, not a completed booking or exhaustive discovery.
+- Intake details are held in conversation session parameters; database persistence is not implemented.
+- Calendly handles scheduling externally. The agent does not create appointments.
+- The backend has discovery failure responses, but dedicated conversation failure, retry, and correction handling still needs implementation and testing.
+- Firestore, Twilio voice, SMS delivery, confirmed customer message capture, and grounded service answers remain planned.
+- The updated Dialogflow configuration still needs to be exported and committed for reproducibility.
+
+### Expanded Service Scope and Next Work
+
+The planned intake scope now includes cloud consulting and migrations, marketing requests such as social media, advertising, SEO, and email marketing, website development and redesign, and app development. Dedicated routing and category-specific discovery for the additional services have not yet been implemented or tested.
+
+Next priorities:
+
+1. Export and version the updated Dialogflow pages and webhook configuration.
+2. Expand discovery fields, prompts, and routing for marketing, website, and app requests.
+3. Incorporate follow-up answers into structured details and summaries, with correction and failure handling.
+4. Add confirmed customer details and Firestore persistence.
+5. Add mobile-number confirmation and explicit SMS permission before sending booking links through Twilio.
+6. Add confirmed customer message capture, Twilio voice, and grounded answers from approved service information.
+
+Public-facing branding will remain independent of Cloud Systems Direct.
