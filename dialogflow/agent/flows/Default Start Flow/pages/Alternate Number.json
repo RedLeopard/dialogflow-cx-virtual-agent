@@ -1,0 +1,72 @@
+{
+  "name": "ccbd9939-71d2-4f37-91dc-46300063ff31",
+  "displayName": "Alternate Number",
+  "form": {
+    "parameters": [
+      {
+        "displayName": "callback_number_raw",
+        "required": true,
+        "entityType": "@sys.phone-number",
+        "fillBehavior": {
+          "initialPromptFulfillment": {
+            "messages": [
+              {
+                "text": {
+                  "text": [
+                    "What's the best number for our team to reach you?"
+                  ]
+                },
+                "languageCode": "en"
+              }
+            ]
+          },
+          "repromptEventHandlers": [
+            {
+              "event": "sys.no-match-default",
+              "triggerFulfillment": {
+                "messages": [
+                  {
+                    "text": {
+                      "text": [
+                        "Sorry, I didn't get the full number. Could you say it again, including the area code?"
+                      ]
+                    },
+                    "languageCode": "en"
+                  }
+                ]
+              },
+              "name": "84105c13-54d3-4652-a3ae-62f486b95849"
+            },
+            {
+              "event": "sys.no-input-default",
+              "triggerFulfillment": {
+                "messages": [
+                  {
+                    "text": {
+                      "text": [
+                        "Whenever you're ready, what's the best number to reach you?"
+                      ]
+                    },
+                    "languageCode": "en"
+                  }
+                ]
+              },
+              "name": "0ea6c72a-5a06-4a30-ae91-76297432cf87"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "transitionRoutes": [
+    {
+      "condition": "$page.params.status = \"FINAL\"",
+      "triggerFulfillment": {
+        "webhook": "Project Discovery Backend",
+        "tag": "confirm-callback"
+      },
+      "targetPage": "Confirm Callback",
+      "name": "19e8321b-0e5f-4974-8c66-1a165b51216d"
+    }
+  ]
+}

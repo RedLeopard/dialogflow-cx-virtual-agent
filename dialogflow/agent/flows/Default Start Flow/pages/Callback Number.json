@@ -1,0 +1,73 @@
+{
+  "name": "518ab3d9-b8e4-45ab-a8b9-840fca19751b",
+  "displayName": "Callback Number",
+  "entryFulfillment": {
+    "webhook": "Project Discovery Backend",
+    "tag": "offer-callback"
+  },
+  "transitionRoutes": [
+    {
+      "condition": "$session.params.callback_candidate = null",
+      "targetPage": "Alternate Number",
+      "name": "8342e7ae-3ebc-4a0a-8709-e0b559a1f268"
+    },
+    {
+      "intent": "confirm.yes",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Perfect."
+              ]
+            },
+            "languageCode": "en"
+          }
+        ],
+        "setParameterActions": [
+          {
+            "parameter": "callback_number",
+            "value": "$session.params.callback_candidate"
+          }
+        ]
+      },
+      "targetPage": "Consultation Request",
+      "name": "06c36279-4a94-4cda-8e76-632248d67aef"
+    },
+    {
+      "intent": "confirm.no",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "No problem."
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "targetPage": "Alternate Number",
+      "name": "8312a14d-3dd1-4d98-9c10-df161c0ea9b3"
+    }
+  ],
+  "eventHandlers": [
+    {
+      "event": "sys.no-match-default",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Just a quick yes or no is perfect. Is that the right number?"
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "name": "7369a26c-7537-46d1-9c10-49cfa1a3ed64"
+    }
+  ]
+}

@@ -6,6 +6,6 @@
     "serviceAgentAuth": "ID_TOKEN"
   },
   "timeout": {
-    "seconds": 30
+    "seconds": 10
   }
 }

@@ -1,0 +1,164 @@
+{
+  "trainingPhrases": [
+    {
+      "id": "8dee646a-1a38-4d13-b55c-8f598242e717",
+      "parts": [
+        {
+          "text": "yes"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "477e36a6-a17b-41d5-891c-42fe25a72330",
+      "parts": [
+        {
+          "text": "yeah"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "4adb32de-f941-4acc-bc3b-4e84e379b75a",
+      "parts": [
+        {
+          "text": "yep"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "af678cff-ea0d-4f54-9644-69082ac37270",
+      "parts": [
+        {
+          "text": "yup"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "1685018b-3f1a-4de0-b31f-e6c1be4f0f13",
+      "parts": [
+        {
+          "text": "correct"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "42c98f92-0bf7-45a5-8ee4-60275ff6cbbb",
+      "parts": [
+        {
+          "text": "that's right"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b2daf2c6-0aa7-4300-9212-d974ec79190d",
+      "parts": [
+        {
+          "text": "that is correct"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "63bfd9d6-33cf-452b-9187-297285df5139",
+      "parts": [
+        {
+          "text": "sure"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "0dfd5606-c631-47ed-9a74-8da37d86c354",
+      "parts": [
+        {
+          "text": "that works"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "c4f09e5b-0f98-443f-b79e-ff8e8880f2b6",
+      "parts": [
+        {
+          "text": "sounds good"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "31be8819-f826-4566-bd4e-755de2de558a",
+      "parts": [
+        {
+          "text": "you got it"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "f3a7cb6c-cd9c-49a9-bcaf-6c41d5e712a3",
+      "parts": [
+        {
+          "text": "perfect"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "7e9f9519-1128-4fd7-8eea-424ca5ff0c71",
+      "parts": [
+        {
+          "text": "absolutely"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "149f8de0-743f-4e0f-9913-871cdcd0030d",
+      "parts": [
+        {
+          "text": "that's the one"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "8a4f1af5-305b-45d8-b872-58f5176d25c3",
+      "parts": [
+        {
+          "text": "this number is fine"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "9a3a5159-e1f5-46e9-ac36-6b9c5a8b5704",
+      "parts": [
+        {
+          "text": "yes that's my number"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    }
+  ]
+}

@@ -1,54 +1,119 @@
 {
   "name": "00000000-0000-0000-0000-000000000000",
   "displayName": "Default Start Flow",
-  "description": "A start flow created along with the agent",
-  "transitionRoutes": [ {
-    "intent": "Default Welcome Intent",
-    "triggerFulfillment": {
-      "messages": [ {
-        "text": {
-          "text": [ "Hello! I am your virtual cloud assistant. I can help you explore cloud services, request a consultation, or get technical support. How can I help you today?" ]
-        },
-        "languageCode": "en"
-      } ]
+  "description": "Cloud Systems Direct caller experience: greeting, contact intake, project discovery, consultation booking.",
+  "transitionRoutes": [
+    {
+      "intent": "Default Welcome Intent",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Thanks for reaching out to Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
+              ]
+            },
+            "languageCode": "en"
+          },
+          {
+            "outputAudioText": {
+              "text": "Thanks for calling Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "targetPage": "Caller Name",
+      "name": "ee4df6a9-bc72-49b7-934f-b285c0550fc6"
     },
-    "name": "ee4df6a9-bc72-49b7-934f-b285c0550fc6"
-  }, {
-    "intent": "consultation.request",
-    "targetPage": "Consultation Request",
-    "name": "7f240bbf-d14a-4ae7-b27f-ffe89127a59b"
-  } ],
-  "eventHandlers": [ {
-    "event": "sys.no-match-default",
-    "triggerFulfillment": {
-      "messages": [ {
-        "text": {
-          "text": [ "I didn't get that. Can you say it again?", "I missed what you said. What was that?", "Sorry, could you say that again?", "Sorry, can you say that again?", "Can you say that again?", "Sorry, I didn't get that. Can you rephrase?", "Sorry, what was that?", "One more time?", "What was that?", "Say that one more time?", "I didn't get that. Can you repeat?", "I missed that, say that again?" ]
-        },
-        "languageCode": "en"
-      } ]
+    {
+      "intent": "consultation.request",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Happy to set that up. Cloud Systems Direct helps businesses with cloud, websites, apps, and digital marketing, and I'll get you to the right expert."
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "targetPage": "Caller Name",
+      "name": "7f240bbf-d14a-4ae7-b27f-ffe89127a59b"
+    }
+  ],
+  "eventHandlers": [
+    {
+      "event": "Default Welcome Intent",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Thanks for reaching out to Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
+              ]
+            },
+            "languageCode": "en"
+          },
+          {
+            "outputAudioText": {
+              "text": "Thanks for calling Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "targetPage": "Caller Name",
+      "name": "f813d958-f589-4a76-a92d-684076635857"
     },
-    "name": "aa1b37bd-5e65-4ecf-9ca7-0f2728bedb7a"
-  }, {
-    "event": "sys.no-input-default",
-    "triggerFulfillment": {
-      "messages": [ {
-        "text": {
-          "text": [ "I didn't get that. Can you say it again?", "I missed what you said. What was that?", "Sorry, could you say that again?", "Sorry, can you say that again?", "Can you say that again?", "Sorry, I didn't get that. Can you rephrase?", "Sorry, what was that?", "One more time?", "What was that?", "Say that one more time?", "I didn't get that. Can you repeat?", "I missed that, say that again?" ]
-        },
-        "languageCode": "en"
-      } ]
+    {
+      "event": "sys.no-match-default",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Sorry, I didn't quite catch that. Could you say it another way?",
+                "I want to make sure I get this right. Could you say that once more?",
+                "Sorry about that. Could you tell me one more time?"
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "name": "aa1b37bd-5e65-4ecf-9ca7-0f2728bedb7a"
     },
-    "name": "4c4153b8-973b-461d-a81e-9e7a65375bdb"
-  } ],
+    {
+      "event": "sys.no-input-default",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Are you still there? Take your time.",
+                "I'm still here whenever you're ready."
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "name": "4c4153b8-973b-461d-a81e-9e7a65375bdb"
+    }
+  ],
   "nluSettings": {
     "modelType": "MODEL_TYPE_ADVANCED",
     "classificationThreshold": 0.30000001
   },
-  "nluSettingsList": [ {
-    "modelType": "MODEL_TYPE_ADVANCED",
-    "classificationThreshold": 0.30000001,
-    "customConfigKey": "a2f6529d-2e26-468c-8448-4c0e7b9a9633",
-    "languageCode": "en"
-  } ]
+  "nluSettingsList": [
+    {
+      "modelType": "MODEL_TYPE_ADVANCED",
+      "classificationThreshold": 0.30000001,
+      "customConfigKey": "a2f6529d-2e26-468c-8448-4c0e7b9a9633",
+      "languageCode": "en"
+    }
+  ]
 }

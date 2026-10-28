@@ -247,3 +247,46 @@ Name capture, caller-number mapping, callback confirmation, and the improved gre
 Firestore, SMS sending, confirmed customer message capture, and grounded service answers remain unimplemented. The console displayed an A2P 10DLC registration requirement for US messaging; verify registration readiness before implementing US SMS delivery. The agent must not claim that details were saved, a text delivered, or an appointment booked without a confirmed backend result.
 
 Detailed resume checkpoint: [Project notes](docs/project-notes.md).
+
+## Progress Update: October 28, 2026 - Caller Experience v2 (built, not yet deployed)
+
+Implements the agreed company greeting and contact intake, and reworks the copy so the agent sounds like Cloud Systems Direct instead of a generic bot. Committed on branch `caller-experience-v2`. Nothing below has been deployed or phone-tested yet.
+
+### New conversation
+
+> **Agent:** Thanks for calling Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant. Who am I speaking with today?
+> **Caller:** Hi, this is Maria.
+> **Agent:** Great to meet you, Maria. If we get disconnected or need to follow up, is the number you're calling from, 3 1 4, 5 5 5, 0 1 2 3, the best one to reach you?
+> **Caller:** Yeah.
+> **Agent:** Perfect. So, what can we help you with today? Whether it's a cloud project, a new website or app, or growing your marketing, just tell me in your own words.
+> **Caller:** Our WordPress site on AWS keeps going down and we want to move to Google Cloud without downtime.
+> **Agent (Gemini):** *A short, specific acknowledgment plus one scoping question, for example:* That sounds frustrating, Maria, and a zero-downtime move is very doable to plan for. Roughly when would you like to be fully on Google Cloud?
+> **Caller:** Within the next two months.
+> **Agent:** Thank you, that gives our team a great head start. The next step is a 30-minute consultation with a Cloud Systems Direct specialist, and you can pick a time that works for you at calendly dot com slash cloud systems. Thanks for calling Cloud Systems Direct. Have a great day.
+
+If caller ID is missing or the caller says no, the agent asks for the best number, reads it back digit by digit, and accepts corrections.
+
+### Changes
+
+- **Start flow:** branded greeting (separate chat text and spoken versions), `Default Welcome Intent` event handler for the Twilio connector (matches the Oct 27 Draft fix), consultation requests also routed through contact intake, and natural no-match / no-input responses replacing the 12 terse defaults.
+- **New pages:** `Caller Name`, `Callback Number`, `Alternate Number`, `Confirm Callback`.
+- **New intents:** `confirm.yes`, `confirm.no`.
+- **Consultation Request:** asks "what can we help you with" across all four service lines.
+- **Project Follow-up:** chat still gets the clickable Calendly link; phone gets a spoken close via `outputAudioText` instead of the full URL read aloud.
+- **Backend:** new fast, model-free tags `greet-caller`, `offer-callback`, `confirm-callback` (`backend/contact.py`); discovery prompt now speaks as Cloud Systems Direct, covers cloud, web, app and marketing work, uses the caller's first name, and is written for a voice; Gemini failures now continue with a natural timeline question instead of a dead-end "try again?".
+- **Speed:** the Gemini client is created once per container instead of on every request, Gemini calls time out after 8 seconds, and the Dialogflow webhook timeout dropped from 30 to 10 seconds, so a stall falls back to the natural question instead of long silence.
+- **Tests:** `tests/test_webhook.py` (name cleanup, number readback, discovery and failure paths, and a check that every page, intent and webhook tag referenced in the flow exists). Run with `pip install -r requirements.txt -r requirements-dev.txt && python -m pytest -q`.
+
+### Rollout steps
+
+1. Run the tests with the pinned dependencies, then redeploy `cx-backend` to Cloud Run as before.
+2. Export a backup of the live agent, then apply this package to Draft (console *Restore* from a zip of `dialogflow/agent/`, or create the pages and intents through the REST API).
+3. In the Twilio Studio Flow's Connect Virtual Agent widget, pass the caller's number as a parameter: `caller_number` = `{{trigger.call.From}}`. Twilio exposes `<Parameter>` values to Dialogflow as `$session.params.<name>`. Verify the value in a test call before relying on it.
+4. Audition a more natural voice with the connector's voice setting or a `voiceName` config on the widget, and pick the one that sounds best on a real phone.
+5. Publish a new flow version to `production` and call the number: test the happy path, a declined callback number, a wrong readback, no caller ID, silence, and a Gemini failure.
+6. Confirm the phone close is spoken without the URL. If the full link is still read out, switch to channel-specific responses.
+7. Re-export the deployed agent and commit it.
+
+### Still not implemented
+
+Firestore persistence, SMS booking links, confirmed message capture, and grounded service answers remain planned. The agent still does not claim details were saved or an appointment was booked.
