@@ -1,0 +1,29 @@
+{
+  "name": "60c3bbf4-e77a-5594-8116-055ab49d1848",
+  "displayName": "Conversation Router",
+  "entryFulfillment": {
+    "webhook": "Project Discovery Backend",
+    "tag": "continue-conversation"
+  },
+  "transitionRoutes": [
+    {
+      "name": "c858313b-0241-5d2f-a198-f682616f5946",
+      "condition": "$session.params.conversation_action = \"handoff\"",
+      "targetPage": "Live Transfer"
+    },
+    {
+      "name": "5c66660a-4c12-5625-ab43-6e81aba00d1e",
+      "condition": "$session.params.conversation_action = \"offer_booking\"",
+      "triggerFulfillment": {
+        "webhook": "Project Discovery Backend",
+        "tag": "finish-discovery"
+      },
+      "targetPage": "Booking Offer"
+    },
+    {
+      "name": "2abb21ea-7b4b-54a4-8f73-71e1a7385e3a",
+      "condition": "true",
+      "targetPage": "Project Follow-up"
+    }
+  ]
+}

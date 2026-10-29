@@ -40,7 +40,7 @@ MANAGED_INTENTS = ["confirm.yes", "confirm.no", "agent.handoff"]
 # Pages are created in this order; routes are filled in a second pass.
 MANAGED_PAGES = [
     "Start Router", "Caller Name", "Callback Number", "Alternate Number", "Confirm Callback",
-    "Consultation Request", "Project Follow-up", "Booking Offer", "Live Transfer", "Voicemail",
+    "Consultation Request", "Project Follow-up", "Conversation Router", "Booking Offer", "Live Transfer", "Voicemail",
 ]
 SPECIAL_PAGES = {"End Session": "END_SESSION", "End Flow": "END_FLOW"}
 

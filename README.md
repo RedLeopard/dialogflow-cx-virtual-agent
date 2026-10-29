@@ -477,3 +477,71 @@ What works after tonight: shorter conversation, greeting flows straight into "Wh
 5. **Decide on always-on:** `cx-backend` runs with `--min-instances 1` (roughly $5-10/month) to avoid cold-start silence. Turn it off with `--min-instances 0` if the cost is not worth it.
 
 Secrets already stored: `twilio-auth-token` (Secret Manager, readable by the `cx-backend` service account).
+
+## October 29, 2026: Contextual dialogue upgrade (code prepared; not deployed)
+
+### Verified deployment checkpoint
+
+The owner verified that Dialogflow `production` points to flow version **4** and
+Cloud Run sends all traffic to revision `cx-backend-00004-t94`. One minimum
+instance remains enabled by choice to reduce cold starts. The seven commits from
+`caller-experience-v2` were fast-forwarded into `main`; both branches matched at
+`585528c`. Earlier instructions to republish v4 or squash the branch are obsolete.
+These checks do not prove SMS delivery, transfer wiring, or actual billing costs.
+
+### Why the dialogue felt rigid
+
+The deployed discovery path sends the initial request and caller name to Gemini,
+asks one follow-up, then moves to booking. It does not give Gemini the conversation
+history or provide a general service-question dialogue loop.
+
+### New implementation
+
+- `backend/conversation.py` supplies limited, editable company service facts and
+  recent caller/assistant turns, plus the latest structured discovery details.
+- The model is instructed to answer the actual question before asking at most one
+  useful follow-up, clarify uncertainty, incorporate corrections, and avoid
+  invented platforms, prices, guarantees or completed actions.
+- Project Follow-up and the new Conversation Router loop until the caller requests
+  booking or has supplied useful project/scoping details without an open question.
+  The model proposes the next step; existing backend code performs messaging.
+- Replies are bounded to 45 words; invalid output and model/network failures ask
+  for clarification without erasing prior details or triggering booking.
+- Owner notifications include recent customer turns and the updated summary.
+- Legacy discovery tags remain supported so deploying the backend first is
+  compatible with production v4.
+
+**Scope:** this changes the discovery conversation after name/callback intake.
+Contact collection and booking yes/no prompts remain structured. Questions during
+those stages, information supplied all at once, durable lead storage, company
+knowledge expansion, and Twilio transfer/voice/caller-ID setup still need work.
+The existing handoff requires Studio wiring; do not claim transfer works yet.
+Prompt instructions reduce unsupported answers but do not guarantee accuracy.
+Conversation memory is session-only (up to 16 recent messages, 2000 characters
+per message), not persistent memory across callers. Additional model turns add
+usage and latency; actual costs must be measured.
+
+### Validation and rollout
+
+1. `python3 -m pip install -r requirements.txt -r requirements-dev.txt`
+2. `python3 -m pytest -q` (offline tests mock model outputs and external messaging).
+3. `python3 scripts/evaluate_conversation.py` exercises the real Vertex model using
+   a short-lived gcloud token. It prints replies for human review, does not call
+   Twilio, and incurs model usage. Review service answers, platform invention,
+   AWS-to-Azure correction, clarification, unknown pricing, guarantees, explicit
+   booking and instruction injection. API success is not a quality pass.
+4. Only after reviewing model replies, deploy the backend using the existing
+   Cloud Run deployment procedure, preserving environment, secrets, and min=1.
+5. Run `python3 scripts/apply_agent.py --dry-run`, review it, then
+   `python3 scripts/apply_agent.py --publish` to load the new page and routes.
+   Record the actual newly assigned version; do not assume a version number.
+6. Test through Dialogflow production and the actual phone line: multiple turns,
+   a correction, a service question, booking permission and delivery, silence,
+   failure, and the existing transfer path once Studio is configured.
+
+Live Vertex response quality and the Dialogflow page loop have **not** been
+validated from this workspace. Backend tests and generated-package integrity
+checks cannot substitute for those tests. Production remains v4 until rollout.
+For dialogue rollback, point production back to flow version 4. The new backend
+still supports v4's tags. Capture the backend revision before any deployment so
+it can also be restored if required.

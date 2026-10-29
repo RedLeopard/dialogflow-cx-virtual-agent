@@ -3,10 +3,12 @@ from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI, HTTPException
 from google.genai.errors import APIError
+from httpx import HTTPError
 from pydantic import BaseModel, Field, ValidationError
 
 from backend.contact import digits, first_name, is_usable_us_number, spoken_number
 from backend.discovery import discover_project, summarize_voicemail
+from backend.conversation import generate_turn, history_from
 from backend.notify import log, send_email, send_sms
 
 app = FastAPI(title="Cloud Systems Direct - Dialogflow CX Fulfillment")
@@ -16,7 +18,7 @@ COMPANY = "Cloud Systems Direct"
 
 # Used when discovery fails so the caller still gets a natural next question.
 FALLBACK_FOLLOW_UP = "Got it. What kind of timeline are you working with?"
-GEMINI_ERRORS = (APIError, RuntimeError, ValidationError, ValueError, KeyError, OSError)
+GEMINI_ERRORS = (APIError, HTTPError, RuntimeError, ValidationError, ValueError, KeyError, OSError)
 
 
 class FulfillmentInfo(BaseModel):
@@ -93,6 +95,9 @@ def lead_lines(params: dict) -> list[str]:
         lines.append(f"Needs: {needs}")
     if follow_up := text_param(params, "project_follow_up"):
         lines.append(f"Follow-up: {follow_up}")
+    for turn in history_from(params.get("conversation_history")):
+        if turn["role"] == "user":
+            lines.append(f"Caller: {turn['text']}")
     if summary := discovery_summary(params):
         lines.append(f"Summary: {summary}")
     return lines
@@ -127,6 +132,57 @@ def confirm_callback(params: dict):
 
 
 # ------------------------------------------------------------------ discovery and booking
+CONVERSATION_FALLBACK = "I didn't quite get that. Could you tell me a little more about what you need?"
+
+
+def conversation_turn(params: dict, utterance: str):
+    if not utterance or len(utterance) > 12000:
+        raise HTTPException(status_code=400, detail="A customer turn of 1-12000 characters is required")
+    history = history_from(params.get("conversation_history"))
+    previous = params.get("project_discovery")
+    try:
+        result = generate_turn(utterance, history,
+                               previous if isinstance(previous, dict) else None,
+                               text_param(params, "caller_first_name") or None)
+    except GEMINI_ERRORS:
+        # Retain the caller's words and old verified extraction; never silently
+        # turn a model failure into a booking or an invented timeline question.
+        log("conversation_failed")
+        history += [{"role": "user", "text": utterance},
+                    {"role": "assistant", "text": CONVERSATION_FALLBACK}]
+        return dict(conversation_history=history_from(history),
+                    conversation_reply=CONVERSATION_FALLBACK,
+                    conversation_action="continue", discovery_status="failed",
+                    project_follow_up=None)
+
+    history.append({"role": "user", "text": utterance})
+    if result.reply:
+        history.append({"role": "assistant", "text": result.reply})
+    return dict(conversation_history=history_from(history),
+                conversation_reply=result.reply, conversation_action=result.action,
+                discovery_status="complete", project_discovery=result.discovery.model_dump(),
+                project_follow_up=None)
+
+
+def start_conversation(params: dict):
+    # On re-entry the router already generated the next response. Speak it once
+    # as the form prompt; don't make a second model call for the same turn.
+    if history_from(params.get("conversation_history")):
+        return respond(text_param(params, "conversation_reply") or CONVERSATION_FALLBACK)
+    updates = conversation_turn(params, text_param(params, "project_needs"))
+    # A first-turn booking/handoff request is processed by the router, without
+    # unnecessarily asking for another answer from the caller.
+    return respond(updates["conversation_reply"], **updates)
+
+
+def continue_conversation(params: dict):
+    utterance = text_param(params, "project_follow_up")
+    if not utterance:
+        return respond()  # router reached from a first-turn booking/handoff
+    updates = conversation_turn(params, utterance)
+    return respond(**updates)
+
+
 def discover(params: dict):
     needs = params.get("project_needs")
     if not isinstance(needs, str) or not needs.strip():
@@ -252,6 +308,8 @@ def voicemail_save(params: dict):
 
 
 HANDLERS = {
+    "start-conversation": start_conversation,
+    "continue-conversation": continue_conversation,
     "greet-caller": greet_caller,
     "offer-callback": offer_callback,
     "confirm-callback": confirm_callback,

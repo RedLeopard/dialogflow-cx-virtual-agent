@@ -11,6 +11,7 @@
     {
       "name": "746eecda-651a-5099-85e1-efb18d101d9a",
       "intent": "consultation.request",
+      "condition": "$session.params.caller_first_name = null",
       "targetPage": "Start Router"
     },
     {

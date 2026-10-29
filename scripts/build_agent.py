@@ -94,7 +94,7 @@ start_flow = {
                    "booking text, live transfer, and smart voicemail.",
     "transitionRoutes": [
         route("flow", "welcome", intent="Default Welcome Intent", target="Start Router"),
-        route("flow", "consultation", intent="consultation.request", target="Start Router"),
+        route("flow", "consultation", intent="consultation.request", condition="$session.params.caller_first_name = null", target="Start Router"),
         # Available on every page, except while taking a voicemail after a missed transfer.
         route("flow", "handoff", intent="agent.handoff",
               condition='$session.params.mode != "voicemail"', target="Live Transfer"),
@@ -165,10 +165,22 @@ pages = [
                    {"messages": [text("What can we help you with today?")]}),
          transitionRoutes=[route("Consultation Request", "done", condition=FINAL, target="Project Follow-up")]),
     page("Project Follow-up",
-         form=form("Project Follow-up", "project_follow_up", "@sys.any", webhook("discover-project")),
-         # Backend texts/emails the lead to the owner, then offers the booking text.
-         transitionRoutes=[route("Project Follow-up", "done", condition=FINAL,
-                                 fulfillment=webhook("finish-discovery"), target="Booking Offer")]),
+         entryFulfillment=webhook("start-conversation"),
+         form=form("Project Follow-up", "project_follow_up", "@sys.any", {"messages": []}),
+         transitionRoutes=[
+             route("Project Follow-up", "action", condition='$session.params.conversation_action = "offer_booking" OR $session.params.conversation_action = "handoff"',
+                   target="Conversation Router"),
+             route("Project Follow-up", "done", condition=FINAL, target="Conversation Router"),
+         ]),
+    page("Conversation Router",
+         entryFulfillment=webhook("continue-conversation"),
+         transitionRoutes=[
+             route("Conversation Router", "handoff", condition='$session.params.conversation_action = "handoff"',
+                   target="Live Transfer"),
+             route("Conversation Router", "booking", condition='$session.params.conversation_action = "offer_booking"',
+                   fulfillment=webhook("finish-discovery"), target="Booking Offer"),
+             route("Conversation Router", "continue", condition="true", target="Project Follow-up"),
+         ]),
     page("Booking Offer",
          transitionRoutes=[
              route("Booking Offer", "no-number", condition="$session.params.booking_offerable = false",

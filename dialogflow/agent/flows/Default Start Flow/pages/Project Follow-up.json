@@ -1,6 +1,10 @@
 {
   "name": "6f679d55-374e-5e5d-a1ba-94766585543f",
   "displayName": "Project Follow-up",
+  "entryFulfillment": {
+    "webhook": "Project Discovery Backend",
+    "tag": "start-conversation"
+  },
   "form": {
     "parameters": [
       {
@@ -9,8 +13,7 @@
         "entityType": "@sys.any",
         "fillBehavior": {
           "initialPromptFulfillment": {
-            "webhook": "Project Discovery Backend",
-            "tag": "discover-project"
+            "messages": []
           }
         }
       }
@@ -18,13 +21,14 @@
   },
   "transitionRoutes": [
     {
+      "name": "6dc094d2-3741-5eac-adb8-919642323705",
+      "condition": "$session.params.conversation_action = \"offer_booking\" OR $session.params.conversation_action = \"handoff\"",
+      "targetPage": "Conversation Router"
+    },
+    {
       "name": "b0a1a3db-b5b6-5d2f-8f1f-9f07e872cbcf",
       "condition": "$page.params.status = \"FINAL\"",
-      "triggerFulfillment": {
-        "webhook": "Project Discovery Backend",
-        "tag": "finish-discovery"
-      },
-      "targetPage": "Booking Offer"
+      "targetPage": "Conversation Router"
     }
   ]
 }
