@@ -448,3 +448,32 @@ python3 scripts/apply_agent.py --publish
 Unverified until tested on the phone: Chirp 3 HD voice support through the Twilio connector; the Studio Liquid path into `AgentHandoffParameters`; that Dialogflow's `!=` condition treats an unset `mode` as not voicemail; that Twilio speaks `outputAudioText` instead of the text version of the greeting.
 
 **Rollback:** point production at version 3 (same command as in the previous section, ending in `versions/3`). In Studio, revert to the previous published flow revision.
+
+## To Do Tomorrow (October 29, 2026)
+
+Tonight (Oct 28) the plan is to deploy the backend with the Twilio settings and publish the v4 conversation (`apply_agent.py --publish`, production flow version 4). Confirm it actually happened: `apply_agent.py` should have printed "LIVE: production now runs version 4."
+
+What works after tonight: shorter conversation, greeting flows straight into "Who am I speaking with?", name and callback number with read-back, Gemini follow-up, booking link texted to the caller, lead text to the owner's cell.
+
+**Known gap until the Studio work below:** if a caller asks for a person, the call ends instead of ringing the owner.
+
+1. **Clean up the branch.** All work is on `caller-experience-v2`. Squash it into `main` as one commit, then delete the branch so there is only `main`:
+   ```bash
+   git checkout main && git pull
+   git merge --squash caller-experience-v2
+   git commit -m "Caller experience upgrade: greeting, contact intake, lead alerts, booking text, transfer, voicemail"
+   git push
+   git branch -D caller-experience-v2 && git push origin --delete caller-experience-v2
+   ```
+   From then on, work directly on `main`.
+2. **Twilio Studio** (`cx-phone` flow), using the steps in "Premium Call Flow v4" above:
+   - Pass caller ID: `caller_number` = `{{trigger.call.From}}`.
+   - Wire **Live Agent Handoff** → Connect Call To the owner's cell (15-second timeout) → Split on `DialCallStatus` → voicemail agent with `mode` = `voicemail`.
+   - Audition a better voice with `voiceName` (start with `en-US-Chirp3-HD-Aoede`).
+3. **Email alerts** through Amazon WorkMail (confirmed by the `autodiscover` DNS record): store the WorkMail password as secret `smtp-password`, then
+   `gcloud run services update cx-backend --region us-central1 --project csd-dialogflow-cx-2026 --update-env-vars SMTP_HOST=smtp.mail.us-east-1.awsapps.com,SMTP_PORT=465,SMTP_USER=Et@cloudsystemsdirect.com,SMTP_FROM=Et@cloudsystemsdirect.com --update-secrets SMTP_PASSWORD=smtp-password:latest`
+   (grant `cx-backend@csd-dialogflow-cx-2026.iam.gserviceaccount.com` the Secret Accessor role on it first).
+4. **Test calls:** happy path with booking text, "talk to a person" answered, "talk to a person" missed then voicemail, wrong number read-back.
+5. **Decide on always-on:** `cx-backend` runs with `--min-instances 1` (roughly $5-10/month) to avoid cold-start silence. Turn it off with `--min-instances 0` if the cost is not worth it.
+
+Secrets already stored: `twilio-auth-token` (Secret Manager, readable by the `cx-backend` service account).
