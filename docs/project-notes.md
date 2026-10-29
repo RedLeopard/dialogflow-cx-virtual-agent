@@ -59,4 +59,4 @@ Do not claim that a request was saved, a text delivered, or an appointment booke
 
 Prefer terminal commands for supported GCP work and use the console for connector setup where required. Guide one step at a time and mark completion only from returned evidence. Keep earlier milestones intact and append progress updates.
 
-Current resume point: documentation saved before starting the contact-intake implementation.
+Current resume point (Oct 28 evening): caller experience v2 is live as production flow version 3 (company greeting, name, callback number, voice-ready discovery). See the README section "v2 Live on the Phone Line" for the deployed state, rollback, owner feedback, and the next work list. Code is on branch `caller-experience-v2`.

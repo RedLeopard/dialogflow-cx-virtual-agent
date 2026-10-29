@@ -248,9 +248,9 @@ Firestore, SMS sending, confirmed customer message capture, and grounded service
 
 Detailed resume checkpoint: [Project notes](docs/project-notes.md).
 
-## Progress Update: October 28, 2026 - Caller Experience v2 (built, not yet deployed)
+## Progress Update: October 28, 2026 - Caller Experience v2 (deployed; see live status below)
 
-Implements the agreed company greeting and contact intake, and reworks the copy so the agent sounds like Cloud Systems Direct instead of a generic bot. Committed on branch `caller-experience-v2`. Nothing below has been deployed or phone-tested yet.
+Implements the agreed company greeting and contact intake, and reworks the copy so the agent sounds like Cloud Systems Direct instead of a generic bot. Committed on branch `caller-experience-v2`. Deployment status is recorded in the next section.
 
 ### New conversation
 
@@ -290,3 +290,60 @@ If caller ID is missing or the caller says no, the agent asks for the best numbe
 ### Still not implemented
 
 Firestore persistence, SMS booking links, confirmed message capture, and grounded service answers remain planned. The agent still does not claim details were saved or an appointment was booked.
+
+## Progress Update: October 28, 2026 (evening) - v2 Live on the Phone Line
+
+This section records what is actually deployed. It supersedes the deployment status above.
+
+### Live now
+
+| Component | State |
+|---|---|
+| Dialogflow `production` environment | Flow **version 3** (`caller-experience-20261028-1933`) |
+| Previous production version | Version 2 (`consultation-v2`, welcome-event fix). Version 1 is the original consultation flow. |
+| Cloud Run `cx-backend` | Revision `cx-backend-00002-swq`, deployed with `--cpu-boost` and `--min-instances 1` |
+| Code | Branch `caller-experience-v2` (not yet merged to `main`) |
+
+Earlier the same evening, production was found still running version 1 even though version 2 had been created; it was switched to version 2 before v3 was published.
+
+### How it was deployed
+
+1. `gcloud run deploy cx-backend --source . --region us-central1 --project csd-dialogflow-cx-2026 --cpu-boost --min-instances 1`
+2. `python3 scripts/apply_agent.py --dry-run`, then `python3 scripts/apply_agent.py --publish`.
+   The script updates the Draft agent from `dialogflow/agent/` by display name (intents, webhook timeout, pages, start flow), creates a new flow version, and points `production` at it. It leaves the Twilio connector and older versions untouched.
+
+**Rollback:** point `production` back at version 2:
+
+```bash
+curl -s -X PATCH -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "x-goog-user-project: csd-dialogflow-cx-2026" -H "Content-Type: application/json" \
+  "https://us-central1-dialogflow.googleapis.com/v3/projects/csd-dialogflow-cx-2026/locations/us-central1/agents/616e7277-d596-4d4d-9053-6df11765881d/environments/e7b9ee85-0c39-476b-8764-ac9faf9c3b6f?updateMask=versionConfigs" \
+  -d '{"versionConfigs":[{"version":"projects/csd-dialogflow-cx-2026/locations/us-central1/agents/616e7277-d596-4d4d-9053-6df11765881d/flows/00000000-0000-0000-0000-000000000000/versions/2"}]}'
+```
+
+### Mac setup notes
+
+- gcloud's default project on the Mac is `ancestoriq`. Set `PROJECT_ID=csd-dialogflow-cx-2026` (or pass `--project`) for every command in this repo.
+- The python.org build of Python 3.14 needed `Install Certificates.command` before `apply_agent.py` could reach Google APIs.
+
+### First phone test of v3
+
+Confirmed: company greeting, name capture, callback-number capture with read-back, Gemini follow-up, no URL read aloud.
+
+Owner feedback: **not premium yet.**
+
+- The default voice is not acceptable.
+- Too much talking, not enough action. Prompts and Gemini replies need to be shorter.
+- The agent never offered to text the booking link, and no link was sent. (SMS sending is not implemented.)
+- The callback number and caller details are **not sent or stored anywhere** yet. They exist only in the Dialogflow session and are lost when the call ends.
+- Caller ID is not passed from Twilio yet, so the agent always asks for the number.
+
+### Next work, in order
+
+1. **Lead delivery:** after every call, send the owner the caller's name, callback number, request, and Gemini summary, and store the record (Firestore).
+2. **Text the booking link:** ask permission, send through Twilio Messaging from the backend, and confirm only on a successful Twilio response. Requires A2P 10DLC registration for US delivery.
+3. **Shorter, more action-oriented conversation:** trim the greeting, the needs prompt, the Gemini acknowledgment, and the close.
+4. **Voice:** audition and set a more natural Google voice on the Twilio connector or Studio widget.
+5. **Caller ID:** pass `caller_number = {{trigger.call.From}}` from the Studio Connect Virtual Agent widget so the agent can offer the calling number instead of asking.
+6. **Missed-call handling:** ring the owner first, then hand to the agent to take a message.
+7. Merge `caller-experience-v2` into `main` and re-export the live agent after verification.
