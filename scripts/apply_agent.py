@@ -114,6 +114,9 @@ def resolve(node, intents, pages, webhooks):
             out[k] = f"{FLOW}/pages/{SPECIAL_PAGES[v]}" if v in SPECIAL_PAGES else lookup(pages, v, "page")
         elif k == "webhook" and isinstance(v, str):
             out[k] = lookup(webhooks, v, "webhook")
+        elif k == "entityType" and isinstance(v, str) and v.startswith("@sys."):
+            # The API wants system entities as full resource names.
+            out[k] = f"projects/-/locations/-/agents/-/entityTypes/{v[1:]}"
         else:
             out[k] = resolve(v, intents, pages, webhooks)
     return out
