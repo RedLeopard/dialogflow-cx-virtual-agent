@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+from time import perf_counter
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -50,17 +51,27 @@ def main():
     conversation._client = lambda: client
     print('Live Vertex evaluation. No texts, emails, bookings or deployment changes.\n')
     failed = 0
+    durations = []
+    requests = 0
     for label, turns in SCENARIOS:
         print(f'--- {label} ---')
         history, previous = [], None
         for utterance in turns:
             print(f'Caller: {utterance}')
+            started = perf_counter()
+            requests += 1
             try:
                 result = conversation.generate_turn(utterance, history, previous, 'Maria')
             except Exception as exc:
+                elapsed = perf_counter() - started
+                durations.append(elapsed)
+                print(f'Response time: {elapsed:.2f}s')
                 print(f'ERROR: {type(exc).__name__}: {exc}')
                 failed += 1
                 break
+            elapsed = perf_counter() - started
+            durations.append(elapsed)
+            print(f'Response time: {elapsed:.2f}s')
             print(f'Assistant [{result.action}]: {result.reply or "(route to next step)"}')
             print('Extracted:', json.dumps(result.discovery.model_dump(), ensure_ascii=False))
             history.extend([{'role': 'user', 'text': utterance},
@@ -69,6 +80,7 @@ def main():
         print()
     print('Review: Did it answer the question, avoid invented facts, retain corrections,')
     print('and ask at most one useful question? An API success is not a quality pass.')
+    print(f'Requests: {requests}; errors: {failed}; slowest: {max(durations, default=0):.2f}s')
     return 1 if failed else 0
 
 

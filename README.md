@@ -545,3 +545,23 @@ checks cannot substitute for those tests. Production remains v4 until rollout.
 For dialogue rollback, point production back to flow version 4. The new backend
 still supports v4's tags. Capture the backend revision before any deployment so
 it can also be restored if required.
+
+### October 29 live model evaluation: fixes prepared, not deployed
+
+The owner's Mac is synchronized at `2b37ab6`, and all 43 offline tests pass on
+Python 3.14. The first real Vertex evaluation returned four `504 DEADLINE_EXCEEDED`
+errors in nine requests; correction/memory and clarification could not be fully
+assessed. Successful replies included compound questions and an unsupported claim
+that the company has no set pricing. This is not ready for phone deployment.
+
+Follow-up changes set `thinking_level=MINIMAL` for conversational generation,
+retain the eight-second request limit, disable automatic retries for these
+requests, and explicitly prohibit compound questions and invented pricing policy.
+Google documents MINIMAL for low-latency chat with Gemini 3.5 Flash:
+https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/guides/gemini-3-5-flash
+This is latency tuning, not proof that model reasoning caused every timeout.
+The evaluation script now prints elapsed time for each request and an error count.
+All 43 offline tests still pass after the changes; real-model latency, answer
+quality and the production page loop remain unverified. Rerun the evaluation and
+review the complete correction/clarification paths before any deployment. More
+model calls may incur usage charges. The live phone agent remains unchanged.

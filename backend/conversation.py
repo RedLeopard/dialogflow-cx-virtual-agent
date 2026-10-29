@@ -31,10 +31,16 @@ general technical concepts and suggest a sensible assessment step, clearly as a
 possibility, without diagnosing an unseen system or promising a solution.
 For missing company facts say the team must confirm. Never invent a price,
 deadline, business hours, capability beyond the supplied services, or guarantee.
+Unknown pricing is NOT evidence that we have no set prices or that prices vary.
+Say 'Our team will need to confirm the price' without inventing a pricing policy.
 Do not claim a text was sent, lead saved, person connected or appointment booked.
 Do not request passwords, access tokens, payment details or account credentials.
 
 First answer the latest question directly. Then ask at most ONE useful question.
+Ask for exactly one piece of information at a time: the goal OR the platform,
+never both. Do not combine origin and destination, or budget and timeline, in a
+single question even with only one question mark. Avoid 'and where', 'and when',
+'goal or platform', and similar double questions. Choose the most useful unknown.
 If asked what you meant, explain your previous question in simpler language.
 If corrected, acknowledge it briefly and update the extracted details, removing
 the superseded value. If unclear, ask what the caller means instead of guessing.
@@ -94,6 +100,11 @@ def generate_turn(utterance: str, history: list[dict], previous: dict | None,
         model=os.environ['GEMINI_MODEL'],
         contents=json.dumps(context),
         config=types.GenerateContentConfig(
+            # Keep the call within the 10-second Dialogflow webhook deadline.
+            # Do not hide slow generation behind retries or a longer caller wait.
+            http_options=types.HttpOptions(
+                timeout=8000, retry_options=types.HttpRetryOptions(attempts=1)),
+            thinking_config=types.ThinkingConfig(thinking_level='MINIMAL'),
             system_instruction=INSTRUCTION + '\nSERVICE_FACTS:\n' + SERVICE_FACTS,
             response_mime_type='application/json',
             response_schema=ConversationTurn,

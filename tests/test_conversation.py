@@ -93,6 +93,9 @@ def test_model_receives_history_facts_and_latest_turn(monkeypatch):
     assert context['latest_customer_turn'] == 'Do you redesign websites?'
     assert context['conversation_history'][0]['text'] == 'I run a shop'
     assert 'SERVICE_FACTS:' in seen['config'].system_instruction
+    assert seen['config'].thinking_config.thinking_level.value == 'MINIMAL'
+    assert seen['config'].http_options.timeout == 8000
+    assert seen['config'].http_options.retry_options.attempts == 1
 
 
 @pytest.mark.parametrize('reply', ['', 'word ' * 46, 'Visit https://example.com', 'What platform? When?'])
