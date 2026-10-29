@@ -1,0 +1,8 @@
+{
+  "name": "dad0b101-b52c-5d5f-a4bd-5bd38879544e",
+  "displayName": "Live Transfer",
+  "entryFulfillment": {
+    "webhook": "Project Discovery Backend",
+    "tag": "handoff"
+  }
+}

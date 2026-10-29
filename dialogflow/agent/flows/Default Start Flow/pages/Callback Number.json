@@ -1,5 +1,5 @@
 {
-  "name": "518ab3d9-b8e4-45ab-a8b9-840fca19751b",
+  "name": "c8b17389-cc6b-5536-9ee3-78f0188580df",
   "displayName": "Callback Number",
   "entryFulfillment": {
     "webhook": "Project Discovery Backend",
@@ -7,23 +7,14 @@
   },
   "transitionRoutes": [
     {
+      "name": "e74d5478-104b-51cc-87f5-4d015ca09135",
       "condition": "$session.params.callback_candidate = null",
-      "targetPage": "Alternate Number",
-      "name": "8342e7ae-3ebc-4a0a-8709-e0b559a1f268"
+      "targetPage": "Alternate Number"
     },
     {
+      "name": "5cfb454e-a647-5434-a7bd-08ae7bc338fd",
       "intent": "confirm.yes",
       "triggerFulfillment": {
-        "messages": [
-          {
-            "text": {
-              "text": [
-                "Perfect."
-              ]
-            },
-            "languageCode": "en"
-          }
-        ],
         "setParameterActions": [
           {
             "parameter": "callback_number",
@@ -31,25 +22,12 @@
           }
         ]
       },
-      "targetPage": "Consultation Request",
-      "name": "06c36279-4a94-4cda-8e76-632248d67aef"
+      "targetPage": "Consultation Request"
     },
     {
+      "name": "8d805ad0-88a6-5a81-ada9-a96f94470375",
       "intent": "confirm.no",
-      "triggerFulfillment": {
-        "messages": [
-          {
-            "text": {
-              "text": [
-                "No problem."
-              ]
-            },
-            "languageCode": "en"
-          }
-        ]
-      },
-      "targetPage": "Alternate Number",
-      "name": "8312a14d-3dd1-4d98-9c10-df161c0ea9b3"
+      "targetPage": "Alternate Number"
     }
   ],
   "eventHandlers": [
@@ -60,14 +38,14 @@
           {
             "text": {
               "text": [
-                "Just a quick yes or no is perfect. Is that the right number?"
+                "Just a yes or no is perfect."
               ]
             },
             "languageCode": "en"
           }
         ]
       },
-      "name": "7369a26c-7537-46d1-9c10-49cfa1a3ed64"
+      "name": "dc874d0e-4d62-5347-83a4-9de2bfec9b3b"
     }
   ]
 }

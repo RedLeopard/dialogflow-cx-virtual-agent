@@ -1,7 +1,7 @@
 {
   "trainingPhrases": [
     {
-      "id": "f36ba10c-9ac8-4ae9-8dc6-811aa852c36b",
+      "id": "8cddfa11-9e55-54dd-8c83-3264418c5f35",
       "parts": [
         {
           "text": "no"
@@ -11,7 +11,7 @@
       "languageCode": "en"
     },
     {
-      "id": "7f9e2ebe-86e3-43f4-84a2-6ede457f5d51",
+      "id": "dcd8c087-696e-5596-9c8f-7ee111f288b6",
       "parts": [
         {
           "text": "nope"
@@ -21,7 +21,7 @@
       "languageCode": "en"
     },
     {
-      "id": "54d0c3fb-efa7-4b1f-9d63-18532402ccfd",
+      "id": "b3b84ce4-ffa7-5fa3-9fed-792902c645ae",
       "parts": [
         {
           "text": "nah"
@@ -31,7 +31,7 @@
       "languageCode": "en"
     },
     {
-      "id": "f8289dc9-7336-4085-a95b-c6c63b2361bc",
+      "id": "24638cb0-0f25-595b-8f17-b5eb84b90edb",
       "parts": [
         {
           "text": "that's wrong"
@@ -41,7 +41,7 @@
       "languageCode": "en"
     },
     {
-      "id": "18d21c0f-9550-4332-b4f3-352aa1474521",
+      "id": "2dc46450-c7cb-5ab0-85d5-5796cea64d7f",
       "parts": [
         {
           "text": "that's not right"
@@ -51,7 +51,7 @@
       "languageCode": "en"
     },
     {
-      "id": "a4df0cd6-21af-48d3-b579-37de4f79cb20",
+      "id": "e452eeb7-aa89-56af-8ea2-ad14bcc9c130",
       "parts": [
         {
           "text": "incorrect"
@@ -61,7 +61,7 @@
       "languageCode": "en"
     },
     {
-      "id": "08199ada-2a0e-4b4a-a901-d87316d278eb",
+      "id": "dabd249d-3f19-504b-9885-683717f20f8b",
       "parts": [
         {
           "text": "not quite"
@@ -71,7 +71,7 @@
       "languageCode": "en"
     },
     {
-      "id": "2dc89679-c20d-4dcd-9f67-340e7b52993c",
+      "id": "44ad69ca-80c9-50f1-98ba-9d1ce117c644",
       "parts": [
         {
           "text": "wrong number"
@@ -81,7 +81,7 @@
       "languageCode": "en"
     },
     {
-      "id": "7da3b4ab-a836-4075-b5d7-ee110c44d629",
+      "id": "e014573a-ac0f-5305-9239-a3b856e6be2e",
       "parts": [
         {
           "text": "use a different number"
@@ -91,7 +91,7 @@
       "languageCode": "en"
     },
     {
-      "id": "4388a63f-cb3e-431c-8d30-2ea084152977",
+      "id": "13b566fc-b9bf-5ce1-a203-d496bfaa5c7c",
       "parts": [
         {
           "text": "no that's not it"
@@ -101,7 +101,7 @@
       "languageCode": "en"
     },
     {
-      "id": "05797287-5caa-4f2c-88f3-ec68deeaff04",
+      "id": "23976f91-c8e1-5251-b94e-08384755a471",
       "parts": [
         {
           "text": "that's not my number"
@@ -111,7 +111,7 @@
       "languageCode": "en"
     },
     {
-      "id": "8e67902f-0d45-4874-b8fb-95a6f74edb86",
+      "id": "62dd0291-97a6-5a36-bb04-ba73036cf0e9",
       "parts": [
         {
           "text": "can you use another number"
@@ -121,10 +121,40 @@
       "languageCode": "en"
     },
     {
-      "id": "74bb53c8-74ca-4217-b5ed-a7acdba3b7cc",
+      "id": "18752ac9-2d07-53c6-8198-a75948df16c3",
       "parts": [
         {
-          "text": "no use my cell"
+          "text": "no thanks"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "334d8b6d-0471-5434-8d46-5a63f3e8885c",
+      "parts": [
+        {
+          "text": "no thank you"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "e9b6eaa8-1403-57d4-a595-cf7cf8ab710c",
+      "parts": [
+        {
+          "text": "don't text me"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "12e57259-ed3f-5120-a560-de54eaf07c04",
+      "parts": [
+        {
+          "text": "I'm good"
         }
       ],
       "repeatCount": 1,

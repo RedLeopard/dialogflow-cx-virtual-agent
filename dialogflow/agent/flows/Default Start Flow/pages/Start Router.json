@@ -1,0 +1,34 @@
+{
+  "name": "e7942f94-5806-5366-a69c-830daa66698a",
+  "displayName": "Start Router",
+  "transitionRoutes": [
+    {
+      "name": "14672e06-2e11-5a43-8626-67af184fd329",
+      "condition": "$session.params.mode = \"voicemail\"",
+      "targetPage": "Voicemail"
+    },
+    {
+      "name": "40d9c2d6-fb57-55f8-9f5d-46e8c1f645f4",
+      "condition": "true",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Thanks for reaching out to Cloud Systems Direct, your cloud, web, and marketing team. I'm the virtual assistant."
+              ]
+            },
+            "languageCode": "en"
+          },
+          {
+            "outputAudioText": {
+              "text": "Thanks for calling Cloud Systems Direct, your cloud, web, and marketing team. I'm the virtual assistant."
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "targetPage": "Caller Name"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "1828e538-df43-57ae-9eca-43ecc380c691",
+  "displayName": "Booking Offer",
+  "transitionRoutes": [
+    {
+      "name": "6fe053dd-d52e-58a8-ad45-2f6bdbcd4a5e",
+      "condition": "$session.params.booking_offerable = false",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Our team will be in touch soon. Thanks for calling Cloud Systems Direct."
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "targetPage": "End Session"
+    },
+    {
+      "name": "c7948d2b-3829-5b76-965f-326b3e5a1491",
+      "intent": "confirm.yes",
+      "triggerFulfillment": {
+        "webhook": "Project Discovery Backend",
+        "tag": "send-booking-link"
+      },
+      "targetPage": "End Session"
+    },
+    {
+      "name": "92109944-93cc-51d1-9b76-d09f8daa2a58",
+      "intent": "confirm.no",
+      "triggerFulfillment": {
+        "webhook": "Project Discovery Backend",
+        "tag": "decline-booking"
+      },
+      "targetPage": "End Session"
+    }
+  ],
+  "eventHandlers": [
+    {
+      "event": "sys.no-match-default",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Just a yes or no. Want the booking link by text?"
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "name": "1e471eee-ff9b-5238-9239-06f76dfd3e42"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "name": "042e5a98-8d04-4aa1-b0fd-e60259e8a06e",
+  "name": "6f679d55-374e-5e5d-a1ba-94766585543f",
   "displayName": "Project Follow-up",
   "form": {
     "parameters": [
@@ -18,27 +18,13 @@
   },
   "transitionRoutes": [
     {
+      "name": "b0a1a3db-b5b6-5d2f-8f1f-9f07e872cbcf",
       "condition": "$page.params.status = \"FINAL\"",
       "triggerFulfillment": {
-        "messages": [
-          {
-            "text": {
-              "text": [
-                "Thank you, that gives our team a great head start. The next step is a 30-minute consultation with a Cloud Systems Direct specialist. Pick a time that works for you here: https://calendly.com/cloudsystems/30-minute-consultation"
-              ]
-            },
-            "languageCode": "en"
-          },
-          {
-            "outputAudioText": {
-              "text": "Thank you, that gives our team a great head start. The next step is a 30-minute consultation with a Cloud Systems Direct specialist, and you can pick a time that works for you at calendly dot com slash cloud systems. Thanks for calling Cloud Systems Direct. Have a great day."
-            },
-            "languageCode": "en"
-          }
-        ]
+        "webhook": "Project Discovery Backend",
+        "tag": "finish-discovery"
       },
-      "targetPage": "End Session",
-      "name": "73e76e10-568f-4645-b1e7-1b079f292bb6"
+      "targetPage": "Booking Offer"
     }
   ]
 }

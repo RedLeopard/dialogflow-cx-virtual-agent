@@ -1,72 +1,35 @@
 {
   "name": "00000000-0000-0000-0000-000000000000",
   "displayName": "Default Start Flow",
-  "description": "Cloud Systems Direct caller experience: greeting, contact intake, project discovery, consultation booking.",
+  "description": "Cloud Systems Direct phone assistant: greeting, contact intake, discovery, booking text, live transfer, and smart voicemail.",
   "transitionRoutes": [
     {
+      "name": "dc5f0b88-5b2e-5690-80af-6eb7ba63fb98",
       "intent": "Default Welcome Intent",
-      "triggerFulfillment": {
-        "messages": [
-          {
-            "text": {
-              "text": [
-                "Thanks for reaching out to Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
-              ]
-            },
-            "languageCode": "en"
-          },
-          {
-            "outputAudioText": {
-              "text": "Thanks for calling Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
-            },
-            "languageCode": "en"
-          }
-        ]
-      },
-      "targetPage": "Caller Name",
-      "name": "ee4df6a9-bc72-49b7-934f-b285c0550fc6"
+      "targetPage": "Start Router"
     },
     {
+      "name": "746eecda-651a-5099-85e1-efb18d101d9a",
       "intent": "consultation.request",
-      "triggerFulfillment": {
-        "messages": [
-          {
-            "text": {
-              "text": [
-                "Happy to set that up. Cloud Systems Direct helps businesses with cloud, websites, apps, and digital marketing, and I'll get you to the right expert."
-              ]
-            },
-            "languageCode": "en"
-          }
-        ]
-      },
-      "targetPage": "Caller Name",
-      "name": "7f240bbf-d14a-4ae7-b27f-ffe89127a59b"
+      "targetPage": "Start Router"
+    },
+    {
+      "name": "6eba71ff-664c-57f1-86ba-34feb4682dce",
+      "intent": "agent.handoff",
+      "condition": "$session.params.mode != \"voicemail\"",
+      "targetPage": "Live Transfer"
     }
   ],
   "eventHandlers": [
     {
       "event": "Default Welcome Intent",
-      "triggerFulfillment": {
-        "messages": [
-          {
-            "text": {
-              "text": [
-                "Thanks for reaching out to Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
-              ]
-            },
-            "languageCode": "en"
-          },
-          {
-            "outputAudioText": {
-              "text": "Thanks for calling Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant."
-            },
-            "languageCode": "en"
-          }
-        ]
-      },
-      "targetPage": "Caller Name",
-      "name": "f813d958-f589-4a76-a92d-684076635857"
+      "name": "c01e7bef-73b9-59db-bf89-9db129e19de5",
+      "targetPage": "Start Router"
+    },
+    {
+      "event": "VOICEMAIL",
+      "name": "8e242fe3-4eae-5e76-b93f-fd051bf248d9",
+      "targetPage": "Voicemail"
     },
     {
       "event": "sys.no-match-default",
@@ -75,16 +38,15 @@
           {
             "text": {
               "text": [
-                "Sorry, I didn't quite catch that. Could you say it another way?",
-                "I want to make sure I get this right. Could you say that once more?",
-                "Sorry about that. Could you tell me one more time?"
+                "Sorry, could you say that another way?",
+                "Sorry, one more time?"
               ]
             },
             "languageCode": "en"
           }
         ]
       },
-      "name": "aa1b37bd-5e65-4ecf-9ca7-0f2728bedb7a"
+      "name": "e3304738-0d99-5567-80c6-fbc1e1469be5"
     },
     {
       "event": "sys.no-input-default",
@@ -93,15 +55,15 @@
           {
             "text": {
               "text": [
-                "Are you still there? Take your time.",
-                "I'm still here whenever you're ready."
+                "Are you still there?",
+                "Take your time, I'm here."
               ]
             },
             "languageCode": "en"
           }
         ]
       },
-      "name": "4c4153b8-973b-461d-a81e-9e7a65375bdb"
+      "name": "a389da46-3b9c-5f51-acdf-c00ab2f63208"
     }
   ],
   "nluSettings": {

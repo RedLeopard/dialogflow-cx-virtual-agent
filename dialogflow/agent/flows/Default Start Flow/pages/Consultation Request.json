@@ -1,5 +1,5 @@
 {
-  "name": "fc22da60-7aaa-4960-8d2e-88131b1c7c7e",
+  "name": "36fce15e-b27c-5cf9-b495-2f220cee53e6",
   "displayName": "Consultation Request",
   "form": {
     "parameters": [
@@ -13,7 +13,7 @@
               {
                 "text": {
                   "text": [
-                    "So, what can we help you with today? Whether it's a cloud project, a new website or app, or growing your marketing, just tell me in your own words."
+                    "What can we help you with today?"
                   ]
                 },
                 "languageCode": "en"
@@ -26,9 +26,9 @@
   },
   "transitionRoutes": [
     {
+      "name": "f4c7a196-145a-52bd-a262-d72045a7cdb7",
       "condition": "$page.params.status = \"FINAL\"",
-      "targetPage": "Project Follow-up",
-      "name": "1913ab4d-b6ca-4486-b424-6ab9a3c4cb47"
+      "targetPage": "Project Follow-up"
     }
   ]
 }

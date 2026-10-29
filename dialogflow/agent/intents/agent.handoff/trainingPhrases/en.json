@@ -1,0 +1,194 @@
+{
+  "trainingPhrases": [
+    {
+      "id": "227cb119-0c3c-550d-a976-ef6584831664",
+      "parts": [
+        {
+          "text": "talk to a person"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "0cd40868-4232-557e-8602-eb43ed9040aa",
+      "parts": [
+        {
+          "text": "speak to someone"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "6bd4e9df-bcd4-5132-b679-c22872092492",
+      "parts": [
+        {
+          "text": "can I talk to someone"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "9e4776c4-9464-5062-bc27-be8ef2b89ca4",
+      "parts": [
+        {
+          "text": "I want to talk to a real person"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "e35e43c6-d475-56e4-8f20-de4a5b01d710",
+      "parts": [
+        {
+          "text": "real person please"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "139ce920-cea4-577a-b790-fd430630245d",
+      "parts": [
+        {
+          "text": "live agent"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "dbd2d05c-69e0-5e7e-a03b-13a2c5de7534",
+      "parts": [
+        {
+          "text": "representative"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "8d864c4f-5cbc-55f3-97ba-856caba80496",
+      "parts": [
+        {
+          "text": "agent"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "75db6aa1-b1c5-5c18-9cba-e3f44094c892",
+      "parts": [
+        {
+          "text": "operator"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "ef4a7856-2c45-5f9b-9316-0605cc6ab029",
+      "parts": [
+        {
+          "text": "human"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b46a4209-19af-59e4-831e-24cd9132a3ca",
+      "parts": [
+        {
+          "text": "talk to a human"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "ae78c66e-5aff-5c60-84dc-e698059b07b6",
+      "parts": [
+        {
+          "text": "transfer me"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b02f6036-0693-5d10-9323-ed3086e559c6",
+      "parts": [
+        {
+          "text": "connect me to someone"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "d023978e-dc2d-5867-b824-c732b0fd841b",
+      "parts": [
+        {
+          "text": "let me speak to the owner"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "a2045884-4b21-520a-abdd-732fee6f871c",
+      "parts": [
+        {
+          "text": "can I speak with someone on the team"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "204af9a9-9e9a-50cf-b156-0ee1378b2a0a",
+      "parts": [
+        {
+          "text": "I'd rather talk to a person"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "c81d26d4-af9a-5f7b-8448-43f0b05549f1",
+      "parts": [
+        {
+          "text": "get me a person"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "8d034d38-1257-55bd-a3df-4885e343eeb3",
+      "parts": [
+        {
+          "text": "speak with a manager"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b3957990-dd45-5317-8113-8621eb1594ca",
+      "parts": [
+        {
+          "text": "is anyone there I can talk to"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    }
+  ]
+}

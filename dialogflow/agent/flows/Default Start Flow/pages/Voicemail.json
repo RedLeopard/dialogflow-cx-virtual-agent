@@ -1,0 +1,48 @@
+{
+  "name": "55f25dcd-1629-5783-ac93-d035cb5037df",
+  "displayName": "Voicemail",
+  "form": {
+    "parameters": [
+      {
+        "displayName": "voicemail_message",
+        "required": true,
+        "entityType": "@sys.any",
+        "fillBehavior": {
+          "initialPromptFulfillment": {
+            "webhook": "Project Discovery Backend",
+            "tag": "voicemail-intro"
+          },
+          "repromptEventHandlers": [
+            {
+              "event": "sys.no-input-default",
+              "triggerFulfillment": {
+                "messages": [
+                  {
+                    "text": {
+                      "text": [
+                        "Go ahead whenever you're ready."
+                      ]
+                    },
+                    "languageCode": "en"
+                  }
+                ]
+              },
+              "name": "d346f34c-12da-5540-accd-c3ca55359c3c"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "transitionRoutes": [
+    {
+      "name": "ae1f0496-18b9-5d54-891a-a82f59c4094c",
+      "condition": "$page.params.status = \"FINAL\"",
+      "triggerFulfillment": {
+        "webhook": "Project Discovery Backend",
+        "tag": "voicemail-save"
+      },
+      "targetPage": "End Session"
+    }
+  ]
+}

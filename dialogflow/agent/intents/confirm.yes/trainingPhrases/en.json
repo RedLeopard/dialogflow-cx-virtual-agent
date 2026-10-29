@@ -1,7 +1,7 @@
 {
   "trainingPhrases": [
     {
-      "id": "8dee646a-1a38-4d13-b55c-8f598242e717",
+      "id": "91e34ff2-e7e7-5887-8ca0-415b64d65d9d",
       "parts": [
         {
           "text": "yes"
@@ -11,7 +11,7 @@
       "languageCode": "en"
     },
     {
-      "id": "477e36a6-a17b-41d5-891c-42fe25a72330",
+      "id": "9879a0d2-c388-53eb-8fb4-87806aeb0975",
       "parts": [
         {
           "text": "yeah"
@@ -21,7 +21,7 @@
       "languageCode": "en"
     },
     {
-      "id": "4adb32de-f941-4acc-bc3b-4e84e379b75a",
+      "id": "f5bb1180-b27c-5fd9-b948-2d0dd1c1dfda",
       "parts": [
         {
           "text": "yep"
@@ -31,7 +31,7 @@
       "languageCode": "en"
     },
     {
-      "id": "af678cff-ea0d-4f54-9644-69082ac37270",
+      "id": "5ecc8781-2f50-5f48-9c2b-f6a0e7d44aaa",
       "parts": [
         {
           "text": "yup"
@@ -41,7 +41,7 @@
       "languageCode": "en"
     },
     {
-      "id": "1685018b-3f1a-4de0-b31f-e6c1be4f0f13",
+      "id": "3c93c7a3-d170-54cf-b440-cbaba721e203",
       "parts": [
         {
           "text": "correct"
@@ -51,7 +51,7 @@
       "languageCode": "en"
     },
     {
-      "id": "42c98f92-0bf7-45a5-8ee4-60275ff6cbbb",
+      "id": "2b1dc571-4639-5a70-9f4b-cbc570d436ef",
       "parts": [
         {
           "text": "that's right"
@@ -61,7 +61,7 @@
       "languageCode": "en"
     },
     {
-      "id": "b2daf2c6-0aa7-4300-9212-d974ec79190d",
+      "id": "ed94452f-e439-55aa-91ac-87f02c5d7edf",
       "parts": [
         {
           "text": "that is correct"
@@ -71,7 +71,7 @@
       "languageCode": "en"
     },
     {
-      "id": "63bfd9d6-33cf-452b-9187-297285df5139",
+      "id": "43a6e195-fcc9-5dc2-a5e5-5d5e609e9e53",
       "parts": [
         {
           "text": "sure"
@@ -81,7 +81,7 @@
       "languageCode": "en"
     },
     {
-      "id": "0dfd5606-c631-47ed-9a74-8da37d86c354",
+      "id": "a1395bfd-ca4c-5776-b03d-39f7829d7993",
       "parts": [
         {
           "text": "that works"
@@ -91,7 +91,7 @@
       "languageCode": "en"
     },
     {
-      "id": "c4f09e5b-0f98-443f-b79e-ff8e8880f2b6",
+      "id": "a3212110-50dd-5b63-93c6-cb7a5be52f33",
       "parts": [
         {
           "text": "sounds good"
@@ -101,7 +101,7 @@
       "languageCode": "en"
     },
     {
-      "id": "31be8819-f826-4566-bd4e-755de2de558a",
+      "id": "9c541ff5-ece0-5d4c-ab3b-f8fbea62382e",
       "parts": [
         {
           "text": "you got it"
@@ -111,7 +111,7 @@
       "languageCode": "en"
     },
     {
-      "id": "f3a7cb6c-cd9c-49a9-bcaf-6c41d5e712a3",
+      "id": "25b0824e-caf9-59ce-bc4a-ac8480d62f94",
       "parts": [
         {
           "text": "perfect"
@@ -121,7 +121,7 @@
       "languageCode": "en"
     },
     {
-      "id": "7e9f9519-1128-4fd7-8eea-424ca5ff0c71",
+      "id": "03be1f4c-f3cc-5fb4-8579-19a30f93841e",
       "parts": [
         {
           "text": "absolutely"
@@ -131,7 +131,7 @@
       "languageCode": "en"
     },
     {
-      "id": "149f8de0-743f-4e0f-9913-871cdcd0030d",
+      "id": "1fe11347-956e-5507-8c78-5cd459a2af9e",
       "parts": [
         {
           "text": "that's the one"
@@ -141,7 +141,7 @@
       "languageCode": "en"
     },
     {
-      "id": "8a4f1af5-305b-45d8-b872-58f5176d25c3",
+      "id": "50923ed2-14d8-56f2-80b0-350a9618159b",
       "parts": [
         {
           "text": "this number is fine"
@@ -151,10 +151,60 @@
       "languageCode": "en"
     },
     {
-      "id": "9a3a5159-e1f5-46e9-ac36-6b9c5a8b5704",
+      "id": "4f7fc57c-cc68-5ed3-b936-7b4093b1dba4",
       "parts": [
         {
           "text": "yes that's my number"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "3e6f9f0e-d7cc-5696-a73c-89dd48b3b79b",
+      "parts": [
+        {
+          "text": "yes please"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "cc91eeba-3b0a-5079-90b4-b2aa9bbafe53",
+      "parts": [
+        {
+          "text": "go ahead"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "120fa2c4-8c3f-5dff-b0c0-67e6954eb056",
+      "parts": [
+        {
+          "text": "please do"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "307f1097-8815-571c-8e46-dab2d4cf7cb2",
+      "parts": [
+        {
+          "text": "send it"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "bfbfc90c-6d84-5a5e-b5d7-7ead8bd4d9ea",
+      "parts": [
+        {
+          "text": "text me"
         }
       ],
       "repeatCount": 1,

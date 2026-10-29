@@ -347,3 +347,104 @@ Owner feedback: **not premium yet.**
 5. **Caller ID:** pass `caller_number = {{trigger.call.From}}` from the Studio Connect Virtual Agent widget so the agent can offer the calling number instead of asking.
 6. **Missed-call handling:** ring the owner first, then hand to the agent to take a message.
 7. Merge `caller-experience-v2` into `main` and re-export the live agent after verification.
+
+## Progress Update: October 28, 2026 (night) - Premium Call Flow v4 (built, not yet deployed)
+
+Built in response to the first v3 phone test ("too much talking, no link sent, number goes nowhere"). Code is on branch `caller-experience-v2`; deployment steps are below. Until they are run, production stays on version 3.
+
+### What the caller gets
+
+> **Agent:** Thanks for calling Cloud Systems Direct, your cloud, web, and marketing team. I'm the virtual assistant. Who am I speaking with?
+> **Caller:** Maria.
+> **Agent:** Hi Maria. Is the number you're calling from, ending in 0 1 2 3, the best way to reach you?
+> **Caller:** Yes.
+> **Agent:** What can we help you with today?
+> **Caller:** Our WordPress site on AWS keeps crashing and we want to move to Google Cloud.
+> **Agent (Gemini, one sentence):** Got it, a move off AWS. When do you need it done?
+> **Caller:** Within two months.
+> **Agent:** Got it. Want me to text you a link to book a 30-minute consultation with our team?
+> **Caller:** Yes.
+> **Agent:** Done, it's on its way. Thanks for calling Cloud Systems Direct, Maria. Talk soon.
+
+At the same moment, the owner gets a text and an email with the lead: name, callback number, request, follow-up answer, and Gemini summary.
+
+**Live transfer:** at any point the caller can say "talk to a person". The owner gets a heads-up text with who is calling and why, and Twilio rings the owner's cell.
+
+**Smart voicemail:** if the owner does not answer, the assistant comes back: "Sorry Maria, nobody could pick up just now. What message would you like to leave for the team?" Gemini recaps it back in one line ("Got it, you need a quote before Friday."), flags urgency, and the owner gets the transcript plus summary by text and email. The assistant says the message was sent only if Twilio or the mail server accepted it.
+
+### Changes
+
+- `backend/notify.py`: Twilio Messaging (REST, standard library) and SMTP email. Never raises; logs one JSON line per event (`lead_captured`, `sms_accepted`, `sms_failed`, `voicemail`, `handoff`, ...), so Cloud Logging also keeps a record of every lead and voicemail.
+- `backend/main.py`: new tags `finish-discovery`, `send-booking-link`, `decline-booking`, `handoff`, `voicemail-intro`, `voicemail-save`; shorter copy everywhere; reads only the last four digits of caller ID aloud; no duplicate texts on retry (`booking_sms_sent`, `lead_notified`).
+- `backend/discovery.py`: Gemini follow-ups capped at one sentence (25 words); new `summarize_voicemail`.
+- `scripts/build_agent.py`: generates all flow, page, and intent JSON (edit the conversation here, then rerun). New pages `Start Router`, `Booking Offer`, `Live Transfer`, `Voicemail`; new intent `agent.handoff`.
+- `scripts/apply_agent.py`: now manages the new pages and intent.
+- Tests: 31 passing, including "no URL is ever spoken" and "voicemail never claims delivery when both channels fail".
+
+### Configuration (Cloud Run environment)
+
+| Variable | Value | Secret? |
+|---|---|---|
+| `TWILIO_ACCOUNT_SID` | `AC...` from the Twilio console home page | no |
+| `TWILIO_AUTH_TOKEN` | Twilio auth token | **yes**, Secret Manager `twilio-auth-token` |
+| `TWILIO_MESSAGING_SERVICE_SID` | `MG...` of the Messaging Service with the approved A2P campaign | no |
+| `OWNER_CELL` | owner's cell in E.164, e.g. `+13145550100` | no |
+| `OWNER_EMAIL` | where lead and voicemail emails go | no |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_FROM` | mail server settings (Gmail/Workspace: `smtp.gmail.com`, `587`) | no |
+| `SMTP_PASSWORD` | app password for `SMTP_USER` | **yes**, Secret Manager `smtp-password` |
+| `BOOKING_URL` | optional; defaults to the Calendly 30-minute link | no |
+
+Texting works without the SMTP settings, and email works without Twilio; the agent only needs one channel to succeed.
+
+### Deploy
+
+```bash
+export PROJECT_ID=csd-dialogflow-cx-2026
+SA=$(gcloud run services describe cx-backend --region us-central1 --project $PROJECT_ID \
+  --format='value(spec.template.spec.serviceAccountName)')
+
+# 1. Store the Twilio auth token (typed, not saved in shell history)
+gcloud services enable secretmanager.googleapis.com --project $PROJECT_ID
+read -s "TW?Twilio auth token: "; echo
+printf '%s' "$TW" | gcloud secrets create twilio-auth-token --data-file=- --project $PROJECT_ID; unset TW
+gcloud secrets add-iam-policy-binding twilio-auth-token --project $PROJECT_ID \
+  --member "serviceAccount:$SA" --role roles/secretmanager.secretAccessor
+
+# 2. Deploy the backend with its settings
+gcloud run deploy cx-backend --source . --region us-central1 --project $PROJECT_ID --cpu-boost \
+  --update-env-vars TWILIO_ACCOUNT_SID=AC...,TWILIO_MESSAGING_SERVICE_SID=MG...,OWNER_CELL=+1...,OWNER_EMAIL=... \
+  --update-secrets TWILIO_AUTH_TOKEN=twilio-auth-token:latest
+
+# 3. Load the conversation and make it live (creates flow version 4)
+python3 scripts/apply_agent.py --dry-run
+python3 scripts/apply_agent.py --publish
+```
+
+### Twilio Studio changes (console, `cx-phone` flow)
+
+1. **Connect Virtual Agent widget** (the existing one, below called `virtual_agent`):
+   - Parameters: `caller_number` = `{{trigger.call.From}}`
+   - Configurations: `voiceName` = a premium Google voice to audition, e.g. `en-US-Chirp3-HD-Aoede` (female) or `en-US-Chirp3-HD-Charon` (male); fall back to `en-US-Neural2-F` / `en-US-Neural2-D` if the call fails to connect.
+2. **Live Agent Handoff** transition of `virtual_agent` → new **Connect Call To** widget `transfer_to_owner`:
+   - Single number: the owner's cell. Caller ID: `{{flow.channel.address}}` (the business number, so transfers are recognizable).
+   - Timeout: **15** seconds, so the cell's own voicemail does not answer first (that would count as answered).
+3. **Connected Call Ended** of `transfer_to_owner` → **Split Based On** `{{widgets.transfer_to_owner.DialCallStatus}}`:
+   - equal to `completed` → nothing (call ends).
+   - no condition matches → new **Connect Virtual Agent** widget `voicemail_agent`, same connector, with parameters:
+     `mode` = `voicemail`,
+     `caller_number` = `{{trigger.call.From}}`,
+     `caller_first_name` = `{{widgets.virtual_agent.VirtualAgentProviderData.AgentHandoffParameters.caller_first_name}}`,
+     `callback_number` = `{{widgets.virtual_agent.VirtualAgentProviderData.AgentHandoffParameters.callback_number}}`,
+     `project_needs` = `{{widgets.virtual_agent.VirtualAgentProviderData.AgentHandoffParameters.project_needs}}`,
+     and the same `voiceName` configuration.
+4. Publish the Studio flow.
+
+### Verify with real calls
+
+1. Happy path: name, confirm caller ID, request, follow-up, say yes to the text. Expect the booking text on the caller's phone and a lead text and email for the owner.
+2. Say "talk to a person". Expect a heads-up text, then the owner's cell rings. Answer once; next time let it ring out and leave a voicemail. Expect the voicemail text and email.
+3. Say "no" to the caller ID, give another number, then say "no" to the read-back once.
+
+Unverified until tested on the phone: Chirp 3 HD voice support through the Twilio connector; the Studio Liquid path into `AgentHandoffParameters`; that Dialogflow's `!=` condition treats an unset `mode` as not voicemail; that Twilio speaks `outputAudioText` instead of the text version of the greeting.
+
+**Rollback:** point production at version 3 (same command as in the previous section, ending in `versions/3`). In Studio, revert to the previous published flow revision.

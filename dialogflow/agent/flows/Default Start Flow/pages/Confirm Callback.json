@@ -1,20 +1,11 @@
 {
-  "name": "c7a1fab4-cc15-4f6a-9daf-b34a7d5f78f6",
+  "name": "5da0b784-a8dc-551a-8741-a8e7a040d4ee",
   "displayName": "Confirm Callback",
   "transitionRoutes": [
     {
+      "name": "f12a0de3-3161-5f19-96ff-8a9756a4423e",
       "intent": "confirm.yes",
       "triggerFulfillment": {
-        "messages": [
-          {
-            "text": {
-              "text": [
-                "Perfect, got it."
-              ]
-            },
-            "languageCode": "en"
-          }
-        ],
         "setParameterActions": [
           {
             "parameter": "callback_number",
@@ -22,17 +13,17 @@
           }
         ]
       },
-      "targetPage": "Consultation Request",
-      "name": "0f6ea401-b0cb-4737-bb26-02c03ee8982a"
+      "targetPage": "Consultation Request"
     },
     {
+      "name": "c145e704-b877-5096-8bf0-c99ac6c86916",
       "intent": "confirm.no",
       "triggerFulfillment": {
         "messages": [
           {
             "text": {
               "text": [
-                "Sorry about that, let's try it again."
+                "Sorry, let's try again."
               ]
             },
             "languageCode": "en"
@@ -45,8 +36,7 @@
           }
         ]
       },
-      "targetPage": "Alternate Number",
-      "name": "9205c9c3-dd1f-4080-bf27-9bbd45d09847"
+      "targetPage": "Alternate Number"
     }
   ],
   "eventHandlers": [
@@ -57,14 +47,14 @@
           {
             "text": {
               "text": [
-                "Just a quick yes or no is perfect. Is that the right number?"
+                "Just a yes or no is perfect."
               ]
             },
             "languageCode": "en"
           }
         ]
       },
-      "name": "506617be-ba7f-415d-ada2-fea34bd21f07"
+      "name": "a081e356-a431-548f-bf13-c6031eb88382"
     }
   ]
 }
