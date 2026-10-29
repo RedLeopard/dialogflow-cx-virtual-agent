@@ -15,14 +15,8 @@
           {
             "text": {
               "text": [
-                "Thanks for reaching out to Cloud Systems Direct, your cloud, web, and marketing team. I'm the virtual assistant."
+                "Thanks for calling Cloud Systems Direct, your cloud, web, and marketing team. I'm the virtual assistant."
               ]
-            },
-            "languageCode": "en"
-          },
-          {
-            "outputAudioText": {
-              "text": "Thanks for calling Cloud Systems Direct, your cloud, web, and marketing team. I'm the virtual assistant."
             },
             "languageCode": "en"
           }

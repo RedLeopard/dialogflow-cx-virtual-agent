@@ -75,11 +75,10 @@ def dump(path, data):
 FINAL = '$page.params.status = "FINAL"'
 
 # ---------------------------------------------------------------- copy (keep it short)
-GREETING_TEXT = (
-    "Thanks for reaching out to Cloud Systems Direct, your cloud, web, and marketing team. "
-    "I'm the virtual assistant."
-)
-GREETING_VOICE = (
+# One plain text greeting, spoken on the phone. Do not add an outputAudioText
+# version: when one is present the phone speaks only that and skips the
+# "Who am I speaking with?" prompt, leaving dead air.
+GREETING = (
     "Thanks for calling Cloud Systems Direct, your cloud, web, and marketing team. "
     "I'm the virtual assistant."
 )
@@ -126,7 +125,7 @@ pages = [
         # Studio's second Virtual Agent widget passes mode=voicemail after a missed transfer.
         route("router", "voicemail", condition='$session.params.mode = "voicemail"', target="Voicemail"),
         route("router", "greeting", condition="true", target="Caller Name",
-              fulfillment={"messages": [text(GREETING_TEXT), spoken(GREETING_VOICE)]}),
+              fulfillment={"messages": [text(GREETING)]}),
     ]),
     page("Caller Name",
          form=form("Caller Name", "caller_name_raw", "@sys.any",
