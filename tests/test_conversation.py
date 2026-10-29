@@ -62,7 +62,7 @@ def test_model_failure_keeps_context_and_does_not_advance(monkeypatch):
     assert p['discovery_status'] == 'failed'
 
 
-@pytest.mark.parametrize('action', ['offer_booking', 'handoff'])
+@pytest.mark.parametrize('action', ['offer_booking', 'handoff', 'take_message'])
 def test_explicit_next_action_does_not_send_anything(monkeypatch, action):
     monkeypatch.setattr(main, 'generate_turn', lambda *a: result('', action=action))
     body = main.start_conversation({'project_needs': 'I want to book' if action == 'offer_booking' else 'A person please'})
@@ -116,5 +116,33 @@ def test_router_wiring_and_managed_pages():
     assert all(r['targetPage'] == 'Conversation Router' for r in follow['transitionRoutes'])
     router = pages['Conversation Router']
     assert router['entryFulfillment']['tag'] == 'continue-conversation'
-    assert [r['targetPage'] for r in router['transitionRoutes']] == ['Live Transfer', 'Booking Offer', 'Project Follow-up']
-    assert router['transitionRoutes'][1]['triggerFulfillment']['tag'] == 'finish-discovery'
+    assert [r['targetPage'] for r in router['transitionRoutes']] == ['Live Transfer', 'Voicemail', 'Booking Offer', 'Project Follow-up']
+    assert router['transitionRoutes'][2]['triggerFulfillment']['tag'] == 'finish-discovery'
+
+
+def test_service_answer_is_spoken_before_booking_offer(monkeypatch):
+    answer = 'Yes, we offer website redesign.'
+    monkeypatch.setattr(main, 'generate_turn', lambda *a: result(answer, action='offer_booking'))
+    body = main.continue_conversation({'project_follow_up': 'Do you redesign websites?'})
+    assert body['fulfillmentResponse']['messages'][0]['text']['text'] == [answer]
+    assert body['sessionInfo']['parameters']['conversation_action'] == 'offer_booking'
+
+
+def test_direct_message_does_not_claim_failed_transfer():
+    body = main.voicemail_intro({'message_requested': True})
+    speech = body['fulfillmentResponse']['messages'][0]['text']['text'][0]
+    assert 'message' in speech
+    assert 'nobody' not in speech and 'Sorry' not in speech
+
+
+def test_declining_booking_offers_message_and_respects_no():
+    from scripts.build_agent import pages
+    by_name = {p['displayName']: p for p in pages}
+    booking_no = next(r for r in by_name['Booking Offer']['transitionRoutes'] if r.get('intent') == 'confirm.no')
+    assert booking_no['targetPage'] == 'Message Offer'
+    message_no = next(r for r in by_name['Message Offer']['transitionRoutes'] if r.get('intent') == 'confirm.no')
+    assert message_no['targetPage'] == 'End Session'
+    message_yes = next(r for r in by_name['Message Offer']['transitionRoutes'] if r.get('intent') == 'confirm.yes')
+    assert message_yes['targetPage'] == 'Voicemail'
+    assert message_yes['triggerFulfillment']['setParameterActions'] == [
+        {'parameter': 'message_requested', 'value': True}]

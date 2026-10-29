@@ -168,7 +168,7 @@ pages = [
          entryFulfillment=webhook("start-conversation"),
          form=form("Project Follow-up", "project_follow_up", "@sys.any", {"messages": []}),
          transitionRoutes=[
-             route("Project Follow-up", "action", condition='$session.params.conversation_action = "offer_booking" OR $session.params.conversation_action = "handoff"',
+             route("Project Follow-up", "action", condition='$session.params.conversation_action = "offer_booking" OR $session.params.conversation_action = "handoff" OR $session.params.conversation_action = "take_message"',
                    target="Conversation Router"),
              route("Project Follow-up", "done", condition=FINAL, target="Conversation Router"),
          ]),
@@ -177,6 +177,8 @@ pages = [
          transitionRoutes=[
              route("Conversation Router", "handoff", condition='$session.params.conversation_action = "handoff"',
                    target="Live Transfer"),
+             route("Conversation Router", "message", condition='$session.params.conversation_action = "take_message"',
+                   target="Voicemail", params={"message_requested": True}),
              route("Conversation Router", "booking", condition='$session.params.conversation_action = "offer_booking"',
                    fulfillment=webhook("finish-discovery"), target="Booking Offer"),
              route("Conversation Router", "continue", condition="true", target="Project Follow-up"),
@@ -188,11 +190,24 @@ pages = [
                    fulfillment={"messages": [text("Our team will be in touch soon. Thanks for calling Cloud Systems Direct.")]}),
              route("Booking Offer", "yes", intent="confirm.yes", target="End Session",
                    fulfillment=webhook("send-booking-link")),
-             route("Booking Offer", "no", intent="confirm.no", target="End Session",
-                   fulfillment=webhook("decline-booking")),
+             route("Booking Offer", "no", intent="confirm.no", target="Message Offer"),
+             route("Booking Offer", "message", intent="message.request", target="Voicemail",
+                   params={"message_requested": True}),
          ],
          eventHandlers=[handler("Booking Offer", "sys.no-match-default",
                                 text("Just a yes or no. Want the booking link by text?"))]),
+    page("Message Offer",
+         entryFulfillment={"messages": [text("No problem. Would you like to leave a message for our team instead?")]},
+         transitionRoutes=[
+             route("Message Offer", "yes", intent="confirm.yes", target="Voicemail",
+                   params={"message_requested": True}),
+             route("Message Offer", "message", intent="message.request", target="Voicemail",
+                   params={"message_requested": True}),
+             route("Message Offer", "no", intent="confirm.no", target="End Session",
+                   fulfillment={"messages": [text("No problem. Thanks for calling Cloud Systems Direct.")]}),
+         ],
+         eventHandlers=[handler("Message Offer", "sys.no-match-default",
+                                text("Would you like to leave a message?"))]),
     page("Live Transfer",
          # Backend texts the owner a heads-up and returns a live agent handoff to Twilio.
          entryFulfillment=webhook("handoff")),
@@ -205,6 +220,10 @@ pages = [
 
 # ---------------------------------------------------------------- intents
 INTENTS = {
+    "message.request": ["leave a message", "I'd like to leave a message", "can I leave a message",
+                        "take a message", "please take a message for the team",
+                        "have someone call me back", "I'd prefer a callback",
+                        "can the owner call me back", "I just want to leave a message"],
     "confirm.yes": ["yes", "yeah", "yep", "yup", "correct", "that's right", "that is correct",
                     "sure", "that works", "sounds good", "you got it", "perfect", "absolutely",
                     "that's the one", "this number is fine", "yes that's my number",

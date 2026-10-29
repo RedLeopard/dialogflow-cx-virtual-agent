@@ -22,7 +22,7 @@
   "transitionRoutes": [
     {
       "name": "6dc094d2-3741-5eac-adb8-919642323705",
-      "condition": "$session.params.conversation_action = \"offer_booking\" OR $session.params.conversation_action = \"handoff\"",
+      "condition": "$session.params.conversation_action = \"offer_booking\" OR $session.params.conversation_action = \"handoff\" OR $session.params.conversation_action = \"take_message\"",
       "targetPage": "Conversation Router"
     },
     {

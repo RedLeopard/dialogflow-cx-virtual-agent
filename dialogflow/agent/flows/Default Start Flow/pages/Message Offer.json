@@ -1,0 +1,79 @@
+{
+  "name": "63b76d5e-1191-5523-931e-d5035c233ae8",
+  "displayName": "Message Offer",
+  "entryFulfillment": {
+    "messages": [
+      {
+        "text": {
+          "text": [
+            "No problem. Would you like to leave a message for our team instead?"
+          ]
+        },
+        "languageCode": "en"
+      }
+    ]
+  },
+  "transitionRoutes": [
+    {
+      "name": "deed1da0-1847-5a4d-bd46-73a4bbf9da58",
+      "intent": "confirm.yes",
+      "triggerFulfillment": {
+        "setParameterActions": [
+          {
+            "parameter": "message_requested",
+            "value": true
+          }
+        ]
+      },
+      "targetPage": "Voicemail"
+    },
+    {
+      "name": "9c58eea2-3256-5dc0-83c0-5a03dd592d91",
+      "intent": "message.request",
+      "triggerFulfillment": {
+        "setParameterActions": [
+          {
+            "parameter": "message_requested",
+            "value": true
+          }
+        ]
+      },
+      "targetPage": "Voicemail"
+    },
+    {
+      "name": "2265a5d1-e1d1-52a1-b475-ec4850206412",
+      "intent": "confirm.no",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "No problem. Thanks for calling Cloud Systems Direct."
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "targetPage": "End Session"
+    }
+  ],
+  "eventHandlers": [
+    {
+      "event": "sys.no-match-default",
+      "triggerFulfillment": {
+        "messages": [
+          {
+            "text": {
+              "text": [
+                "Would you like to leave a message?"
+              ]
+            },
+            "languageCode": "en"
+          }
+        ]
+      },
+      "name": "2221d344-ce1f-5785-9b7a-b36e44bfee0d"
+    }
+  ]
+}

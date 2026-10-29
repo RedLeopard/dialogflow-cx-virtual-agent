@@ -565,3 +565,48 @@ All 43 offline tests still pass after the changes; real-model latency, answer
 quality and the production page loop remain unverified. Rerun the evaluation and
 review the complete correction/clarification paths before any deployment. More
 model calls may incur usage charges. The live phone agent remains unchanged.
+
+### October 29: Booking, transfer or message as the call outcome (not deployed)
+
+The owner's clarified objective is to answer customer questions intelligently,
+then help them book, reach the owner or leave a message. Discovery should support
+that outcome rather than becoming an open-ended support conversation.
+
+The dialogue prompt now allows a brief factual service answer followed immediately
+by the existing booking offer, without mandatory platform/budget/timeline intake.
+It normally limits project scoping to one useful question. The model can request
+`take_message`; Conversation Router sends this to the existing message-capture
+and notification path. Declining booking now offers a message; declining that
+ends politely. Direct messages do not falsely say that nobody answered a transfer.
+Existing model-free handoff and consent-before-booking-text behavior are retained.
+Questions during name/number intake and arbitrary questions at the booking yes/no
+prompt remain limitations. Message delivery still depends on the configured
+notification services; accepted notification does not prove recipient delivery.
+
+47 offline tests pass. New coverage checks service-answer speech before booking,
+direct message routing and declining both offers. The live evaluator includes
+message and callback requests. It still requires execution on the owner's Mac;
+no new dialogue code, flow or voice has been deployed from this workspace.
+Transfers require the separate Twilio Studio wiring already described above.
+Booking currently means sending a booking link, not creating an appointment.
+
+#### Natural voice setup to audition on the actual line
+
+1. In Twilio Studio open `cx-phone` and select its Connect Virtual Agent widget.
+2. In **Config → Configurations** add or update `voiceName` to
+   `en-US-Chirp3-HD-Aoede`. This goes in Configurations, not session Parameters.
+3. Save and publish the Studio flow, then call the business number to audition
+   greeting, name/number readback and Gemini replies. The real connector/phone
+   test is required; do not assume the voice is active because the field saved.
+4. If a second voicemail Virtual Agent widget exists, use the same voice setting.
+   Keep the prior value for rollback. If the connector rejects the requested
+   voice, restore it and inspect the error before selecting a supported fallback.
+
+Twilio documents the `voiceName` override and use of supported Google voices:
+https://www.twilio.com/docs/studio/widget-library/connect-virtual-agent
+https://www.twilio.com/en-us/blog/google-dialogflow-cx-virtual-agents-with-twilio
+Google's Dialogflow settings document Chirp3-HD voice selection and the lack of
+SSML support for these voices:
+https://docs.cloud.google.com/dialogflow/cx/docs/concept/agent-settings
+The current generated prompts use plain text, not SSML. Voice choice must be
+judged on the phone; it does not fix model-generation latency or routing errors.

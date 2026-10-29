@@ -12,6 +12,19 @@
       "targetPage": "Live Transfer"
     },
     {
+      "name": "d64328f5-cda3-53aa-8ee7-4897c19337ec",
+      "condition": "$session.params.conversation_action = \"take_message\"",
+      "triggerFulfillment": {
+        "setParameterActions": [
+          {
+            "parameter": "message_requested",
+            "value": true
+          }
+        ]
+      },
+      "targetPage": "Voicemail"
+    },
+    {
       "name": "5c66660a-4c12-5625-ab43-6e81aba00d1e",
       "condition": "$session.params.conversation_action = \"offer_booking\"",
       "triggerFulfillment": {

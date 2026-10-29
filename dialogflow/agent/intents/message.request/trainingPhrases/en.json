@@ -1,0 +1,94 @@
+{
+  "trainingPhrases": [
+    {
+      "id": "7482fcb7-9fa3-5388-98ac-a2f4d7f8de11",
+      "parts": [
+        {
+          "text": "leave a message"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "9d5478ed-171a-58e6-8666-100e71e14e02",
+      "parts": [
+        {
+          "text": "I'd like to leave a message"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b08898d5-ae79-5495-901a-afa383604a64",
+      "parts": [
+        {
+          "text": "can I leave a message"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "0cd7247a-831f-5353-9517-c359f06fae61",
+      "parts": [
+        {
+          "text": "take a message"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "c8e73e9c-7dc1-5f3a-bfc5-a795c81917c0",
+      "parts": [
+        {
+          "text": "please take a message for the team"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "fc131a12-6cbf-5a5c-8727-f0792250cc2b",
+      "parts": [
+        {
+          "text": "have someone call me back"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "7ec09c04-fdc0-5c2d-958a-b15244c60516",
+      "parts": [
+        {
+          "text": "I'd prefer a callback"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "51226c6c-a947-546d-8f82-cd46a30eb54b",
+      "parts": [
+        {
+          "text": "can the owner call me back"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b0e47e66-d331-5d00-bb5b-5e20b7beae0e",
+      "parts": [
+        {
+          "text": "I just want to leave a message"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    }
+  ]
+}

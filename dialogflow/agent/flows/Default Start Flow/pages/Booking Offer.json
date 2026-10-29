@@ -31,11 +31,20 @@
     {
       "name": "92109944-93cc-51d1-9b76-d09f8daa2a58",
       "intent": "confirm.no",
+      "targetPage": "Message Offer"
+    },
+    {
+      "name": "13e7c9a5-7f2d-5ab7-85d5-d876a9b23385",
+      "intent": "message.request",
       "triggerFulfillment": {
-        "webhook": "Project Discovery Backend",
-        "tag": "decline-booking"
+        "setParameterActions": [
+          {
+            "parameter": "message_requested",
+            "value": true
+          }
+        ]
       },
-      "targetPage": "End Session"
+      "targetPage": "Voicemail"
     }
   ],
   "eventHandlers": [

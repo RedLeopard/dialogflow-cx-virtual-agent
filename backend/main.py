@@ -180,7 +180,9 @@ def continue_conversation(params: dict):
     if not utterance:
         return respond()  # router reached from a first-turn booking/handoff
     updates = conversation_turn(params, utterance)
-    return respond(**updates)
+    # A factual answer must be heard before the router adds a booking offer.
+    answer = updates['conversation_reply'] if updates['conversation_action'] == 'offer_booking' else None
+    return respond(answer, **updates)
 
 
 def discover(params: dict):
@@ -268,6 +270,8 @@ def handoff(params: dict):
 
 
 def voicemail_intro(params: dict):
+    if params.get("message_requested") is True:
+        return respond("Of course. What message would you like me to pass along?")
     return respond(
         f"Sorry{name_part(params, ' ')}, nobody could pick up just now. "
         "What message would you like to leave for the team?"
