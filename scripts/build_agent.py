@@ -79,8 +79,8 @@ FINAL = '$page.params.status = "FINAL"'
 # version: when one is present the phone speaks only that and skips the
 # "Who am I speaking with?" prompt, leaving dead air.
 GREETING = (
-    "Thanks for calling Cloud Systems Direct. Let's get your next project moving. "
-    "I'm the virtual assistant."
+    "Thanks for calling Cloud Systems Direct. I'm Maya, your virtual receptionist. "
+    "Let's get your next project moving."
 )
 NO_MATCH = text("Sorry, could you say that another way?", "Sorry, one more time?")
 NO_INPUT = text("Are you still there?", "Take your time, I'm here.")

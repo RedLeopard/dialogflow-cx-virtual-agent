@@ -632,3 +632,11 @@ actual new version and the previous production version for rollback. The new
 multi-turn page loop still needs production API and actual phone testing.
 Twilio voice configuration is separate and must be verified in the published
 Studio Flow; deploying this code does not change the connector voice.
+
+### Receptionist name: Maya (pending rollout)
+
+The owner requested a name for the phone receptionist. The opening now reads:
+"Thanks for calling Cloud Systems Direct. I'm Maya, your virtual receptionist.
+Let's get your next project moving." The next page asks for the caller's name.
+Generated agent JSON and the existing greeting check are updated; 54 tests pass.
+This is a code/configuration change on main, not evidence of a live deployment.
