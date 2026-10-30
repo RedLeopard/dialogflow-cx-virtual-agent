@@ -79,8 +79,8 @@ FINAL = '$page.params.status = "FINAL"'
 # version: when one is present the phone speaks only that and skips the
 # "Who am I speaking with?" prompt, leaving dead air.
 GREETING = (
-    "Thanks for calling Cloud Systems Direct. I'm Maya. "
-    "Let's get your next project moving."
+    "Hey there, and thank you for calling Cloud Systems Direct. I'm Maya. "
+    "Great ideas deserve the right team behind them."
 )
 NO_MATCH = text("Sorry, could you say that another way?", "Sorry, one more time?")
 NO_INPUT = text("Are you still there?", "Take your time, I'm here.")
@@ -129,7 +129,7 @@ pages = [
     ]),
     page("Caller Name",
          form=form("Caller Name", "caller_name_raw", "@sys.any",
-                   {"messages": [text("Who am I speaking with?")]},
+                   {"messages": [text("Who do I have the pleasure of speaking with today?")]},
                    [("sys.no-input-default", text("Sorry, who am I speaking with?"))]),
          transitionRoutes=[route("Caller Name", "done", condition=FINAL,
                                  fulfillment=webhook("greet-caller"), target="Callback Number")]),

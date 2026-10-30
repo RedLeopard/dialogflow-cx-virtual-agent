@@ -636,7 +636,9 @@ Studio Flow; deploying this code does not change the connector voice.
 ### Receptionist name: Maya (pending rollout)
 
 The owner requested a name for the phone receptionist. The opening now reads:
-"Thanks for calling Cloud Systems Direct. I'm Maya.
-Let's get your next project moving." The next page asks for the caller's name.
+"Hey there, and thank you for calling Cloud Systems Direct. I'm Maya.
+Great ideas deserve the right team behind them." The next page asks:
+"Who do I have the pleasure of speaking with today?" This is the approved
+opening, with the name question kept in its form prompt so it is spoken once.
 Generated agent JSON and the existing greeting check are updated; 54 tests pass.
 This is a code/configuration change on main, not evidence of a live deployment.

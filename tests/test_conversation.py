@@ -175,7 +175,10 @@ def test_generic_cost_optimization_is_not_company_pricing():
 
 def test_greeting_is_updated_in_generated_package():
     from scripts.build_agent import GREETING, pages
-    assert GREETING == "Thanks for calling Cloud Systems Direct. I'm Maya. Let's get your next project moving."
+    assert GREETING == "Hey there, and thank you for calling Cloud Systems Direct. I'm Maya. Great ideas deserve the right team behind them."
     assert 'your cloud, web, and marketing team' not in GREETING
     router = next(p for p in pages if p['displayName'] == 'Start Router')
     assert router['transitionRoutes'][1]['triggerFulfillment']['messages'][0]['text']['text'] == [GREETING]
+    caller_page = next(p for p in pages if p['displayName'] == 'Caller Name')
+    prompt = caller_page['form']['parameters'][0]['fillBehavior']['initialPromptFulfillment']['messages'][0]['text']['text'][0]
+    assert prompt == 'Who do I have the pleasure of speaking with today?'
