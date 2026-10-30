@@ -22,6 +22,46 @@ A phone assistant for **Cloud Systems Direct**, built by Edward Thornton with Di
 
 ## Architecture
 
+```mermaid
+flowchart TB
+    accTitle: Maya phone assistant architecture
+    accDescr: Twilio connects callers to Dialogflow CX. Cloud Run calls Gemini and Twilio Messaging. Callers can reach the owner or open Calendly to book a consultation.
+    caller(["Caller"])
+    studio["Twilio Voice + Studio"]
+    owner(["Business owner"])
+
+    subgraph gcp["Google Cloud"]
+        cx["Dialogflow CX"]
+        api["FastAPI on Cloud Run"]
+        ai["Gemini on Vertex AI"]
+        cx <-->|"ID-token webhook + response"| api
+        api <-->|"Context + structured output"| ai
+    end
+
+    sms["Twilio Messaging"]
+    calendar["Calendly"]
+
+    caller <-->|"Phone call"| studio
+    studio <-->|"Voice session"| cx
+    studio -->|"Live handoff"| owner
+    api -->|"Booking links + owner alerts"| sms
+    sms -->|"Booking SMS after permission"| caller
+    sms -->|"Lead and handoff alerts"| owner
+    caller -->|"Open link and choose a time"| calendar
+
+    classDef person fill:#e8f7ed,stroke:#238636,color:#102a18
+    classDef twilio fill:#fff1f0,stroke:#e24949,color:#5c1721
+    classDef google fill:#eef5ff,stroke:#4285f4,color:#10264d
+    classDef booking fill:#fff6e5,stroke:#bf8700,color:#513900
+    class caller,owner person
+    class studio,sms twilio
+    class cx,api,ai google
+    class calendar booking
+    style gcp fill:#f6f9ff,stroke:#8cb4f8,color:#10264d
+```
+
+Studio controls the call and live transfer. Dialogflow manages conversation state; Cloud Run coordinates model requests and external actions. The customer opens the SMS link to schedule in Calendly. The missed-call return path remains in progress.
+
 | Component | Responsibility |
 | --- | --- |
 | Twilio Voice + Studio | Connect calls to Dialogflow and route live handoffs. |
@@ -31,6 +71,8 @@ A phone assistant for **Cloud Systems Direct**, built by Edward Thornton with Di
 | Twilio Messaging + Calendly | Send permission-based booking links and owner alerts; customers choose a meeting time externally. |
 
 The backend uses service-agent ID-token authentication and a dedicated runtime service account. Twilio credentials are referenced through Secret Manager. One Cloud Run instance is kept warm to reduce startup pauses.
+
+See the [architecture decisions, security boundaries, and failure handling](docs/architecture.md).
 
 ## Development timeline
 
