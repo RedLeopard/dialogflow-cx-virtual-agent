@@ -23,44 +23,37 @@ A phone assistant for **Cloud Systems Direct**, built by Edward Thornton with Di
 ## Architecture
 
 ```mermaid
-flowchart TB
-    accTitle: Maya phone assistant architecture
-    accDescr: Twilio connects callers to Dialogflow CX. Cloud Run calls Gemini and Twilio Messaging. Callers can reach the owner or open Calendly to book a consultation.
-    caller(["Caller"])
-    studio["Twilio Voice + Studio"]
-    owner(["Business owner"])
+flowchart LR
+    accTitle: Maya architecture overview
+    accDescr: Twilio connects calls to Maya. The backend uses Gemini and sends booking links. Twilio also transfers calls to the owner.
 
-    subgraph gcp["Google Cloud"]
-        cx["Dialogflow CX"]
-        api["FastAPI on Cloud Run"]
-        ai["Gemini on Vertex AI"]
-        cx <-->|"ID-token webhook + response"| api
-        api <-->|"Context + structured output"| ai
-    end
+    phone("`**Phone calls**
+Twilio Voice + Studio`")
+    maya("`**Maya**
+Dialogflow CX`")
+    backend("`**Backend**
+FastAPI on Cloud Run`")
+    ai("`**AI answers**
+Gemini on Vertex AI`")
+    booking("`**Booking texts**
+Twilio + Calendly`")
+    owner("`**Live transfer**
+Owner's phone`")
 
-    sms["Twilio Messaging"]
-    calendar["Calendly"]
+    phone --> maya --> backend
+    backend <--> ai
+    backend --> booking
+    phone --> owner
 
-    caller <-->|"Phone call"| studio
-    studio <-->|"Voice session"| cx
-    studio -->|"Live handoff"| owner
-    api -->|"Booking links + owner alerts"| sms
-    sms -->|"Booking SMS after permission"| caller
-    sms -->|"Lead and handoff alerts"| owner
-    caller -->|"Open link and choose a time"| calendar
-
-    classDef person fill:#e8f7ed,stroke:#238636,color:#102a18
-    classDef twilio fill:#fff1f0,stroke:#e24949,color:#5c1721
-    classDef google fill:#eef5ff,stroke:#4285f4,color:#10264d
-    classDef booking fill:#fff6e5,stroke:#bf8700,color:#513900
-    class caller,owner person
-    class studio,sms twilio
-    class cx,api,ai google
-    class calendar booking
-    style gcp fill:#f6f9ff,stroke:#8cb4f8,color:#10264d
+    classDef core fill:#eff6ff,stroke:#93c5fd,color:#172554,stroke-width:1.5px
+    classDef intelligence fill:#f5f3ff,stroke:#c4b5fd,color:#3b1d64,stroke-width:1.5px
+    classDef outcome fill:#ecfdf5,stroke:#86efac,color:#14532d,stroke-width:1.5px
+    class phone,maya,backend core
+    class ai intelligence
+    class booking,owner outcome
 ```
 
-Studio controls the call and live transfer. Dialogflow manages conversation state; Cloud Run coordinates model requests and external actions. The customer opens the SMS link to schedule in Calendly. The missed-call return path remains in progress.
+Twilio connects calls to Maya. The backend supports AI answers and booking texts; Studio handles live transfers.
 
 | Component | Responsibility |
 | --- | --- |
@@ -70,9 +63,7 @@ Studio controls the call and live transfer. Dialogflow manages conversation stat
 | Gemini on Vertex AI | Use recent conversation context for extraction, answers, corrections, and summaries. |
 | Twilio Messaging + Calendly | Send permission-based booking links and owner alerts; customers choose a meeting time externally. |
 
-The backend uses service-agent ID-token authentication and a dedicated runtime service account. Twilio credentials are referenced through Secret Manager. One Cloud Run instance is kept warm to reduce startup pauses.
-
-See the [architecture decisions, security boundaries, and failure handling](docs/architecture.md).
+Security, design decisions, and failure handling are covered in the [architecture notes](docs/architecture.md).
 
 ## Development timeline
 
