@@ -610,3 +610,25 @@ SSML support for these voices:
 https://docs.cloud.google.com/dialogflow/cx/docs/concept/agent-settings
 The current generated prompts use plain text, not SSML. Voice choice must be
 judged on the phone; it does not fix model-generation latency or routing errors.
+
+### October 29: Revised opening and reviewed policy answers (pending rollout)
+
+The new opening is: "Thanks for calling Cloud Systems Direct. Let's get your next
+project moving. I'm the virtual assistant." The next page asks for the caller's
+name. The generated Start Router package contains the new opening.
+
+The owner's latest real Vertex evaluation completed 13 requests with zero errors,
+with measured generation times from 1.20 to 5.32 seconds. It demonstrated Azure
+correction/memory, booking and message actions, but still invented pricing and
+service-guarantee policies. Applicable pricing/guarantee inquiries now use reviewed
+answer text after model extraction, while retaining explicit message/transfer
+choices. This narrow rule is not general protection against all unsupported claims.
+54 offline tests pass after the greeting and policy changes.
+
+No backend or Dialogflow rollout was performed from this workspace. A Git pull
+updates the laptop only. Cloud Run must be deployed, then the agent package must
+be applied and a new flow version published. The publishing script prints the
+actual new version and the previous production version for rollback. The new
+multi-turn page loop still needs production API and actual phone testing.
+Twilio voice configuration is separate and must be verified in the published
+Studio Flow; deploying this code does not change the connector voice.

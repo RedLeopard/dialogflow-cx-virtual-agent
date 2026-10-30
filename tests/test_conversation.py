@@ -146,3 +146,36 @@ def test_declining_booking_offers_message_and_respects_no():
     assert message_yes['targetPage'] == 'Voicemail'
     assert message_yes['triggerFulfillment']['setParameterActions'] == [
         {'parameter': 'message_requested', 'value': True}]
+
+
+@pytest.mark.parametrize('question,expected', [
+    ('How much will a new website cost?', 'Our team will need to confirm pricing for your project.'),
+    ('What are your prices?', 'Our team will need to confirm pricing for your project.'),
+    ('Can you guarantee zero downtime?', 'Our team would need to assess your requirements before confirming any service commitments.'),
+])
+def test_unknown_policies_use_reviewed_answers(question, expected):
+    turn = result('We have no set prices or service guarantees.', action='offer_booking')
+    grounded = conversation.ground_policy_answer(turn, question)
+    assert grounded.reply == expected
+    assert grounded.action == 'offer_booking'
+
+
+@pytest.mark.parametrize('action', ['take_message', 'handoff'])
+def test_policy_questions_do_not_override_explicit_message_or_transfer(action):
+    turn = result('', action=action)
+    assert conversation.ground_policy_answer(turn, 'Can someone call me about pricing?').action == action
+
+
+def test_generic_cost_optimization_is_not_company_pricing():
+    turn = result('What part of your cloud setup is costing the most?')
+    grounded = conversation.ground_policy_answer(turn, 'I want to reduce our cloud costs.')
+    assert grounded.reply == turn.reply
+    assert grounded.action == 'continue'
+
+
+def test_greeting_is_updated_in_generated_package():
+    from scripts.build_agent import GREETING, pages
+    assert GREETING == "Thanks for calling Cloud Systems Direct. Let's get your next project moving. I'm the virtual assistant."
+    assert 'your cloud, web, and marketing team' not in GREETING
+    router = next(p for p in pages if p['displayName'] == 'Start Router')
+    assert router['transitionRoutes'][1]['triggerFulfillment']['messages'][0]['text']['text'] == [GREETING]

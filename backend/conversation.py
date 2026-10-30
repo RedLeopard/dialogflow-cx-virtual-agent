@@ -1,5 +1,6 @@
 """Contextual service conversation; messaging actions remain in main.py."""
 import json
+import re
 from typing import Literal
 
 from google.genai import types
@@ -86,6 +87,30 @@ class ConversationTurn(BaseModel):
     discovery: ProjectDiscovery
 
 
+def ground_policy_answer(result: ConversationTurn, utterance: str) -> ConversationTurn:
+    """Unknown company policies get reviewed wording, not a generated policy.
+
+    Apply only to relevant pricing/guarantee inquiries, after extraction. An
+    explicit transfer or message request always retains its requested action.
+    """
+    if result.action in ('handoff', 'take_message'):
+        return result
+    pricing = re.search(
+        r'\b(?:pricing|your (?:prices?|rates?|fees?)|what (?:is|are) (?:the |your )?(?:price|cost|rate|fee))\b'
+        r'|\bhow much\b.*\b(?:cost|charge|pay)\b',
+        utterance, re.I)
+    guarantee = re.search(r'\b(?:guarantee[ds]?|sla)\b', utterance, re.I)
+    answers = []
+    if pricing:
+        answers.append('Our team will need to confirm pricing for your project.')
+    if guarantee:
+        answers.append('Our team would need to assess your requirements before confirming any service commitments.')
+    if answers:
+        result.reply = ' '.join(answers)
+        # Preserve the selected route, including callers who do not want booking.
+    return result
+
+
 def history_from(value) -> list[dict]:
     """Bound context and discard unexpected data/roles in session parameters."""
     if not isinstance(value, list):
@@ -124,7 +149,7 @@ def generate_turn(utterance: str, history: list[dict], previous: dict | None,
     )
     if not response.text:
         raise RuntimeError('Empty conversational response')
-    result = ConversationTurn.model_validate_json(response.text)
+    result = ground_policy_answer(ConversationTurn.model_validate_json(response.text), utterance)
     if result.reply or result.action == 'continue':
         # Reject malformed speech instead of reading markup/URLs or a monologue.
         if not result.reply.strip() or len(result.reply.split()) > 45 or 'http' in result.reply.lower():
