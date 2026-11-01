@@ -130,5 +130,5 @@ The real-model evaluator is `scripts/evaluate_conversation.py`. Deployment conte
 
 **End-to-end goal:** capture an inquiry → understand the need → route the caller → preserve the outcome → measure what needs attention → improve the business response. BigQuery is the planned analytical history, and Power BI is the planned reporting layer. Neither is required to answer a call, and analytics collection should not delay the live conversation.
 
-Message transcripts currently use Cloud Logging. Audio recording and in-call appointment creation are not implemented.
+Message transcripts currently use Cloud Logging.
 
