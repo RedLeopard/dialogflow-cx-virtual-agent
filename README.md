@@ -1,10 +1,12 @@
 # Maya · Dialogflow CX Virtual Agent
 
-A business phone solution for **a working technology firm**, designed and built by Edward Thornton with Dialogflow CX, Gemini on Vertex AI, and FastAPI on Cloud Run. Maya captures caller details, answers service questions, and guides callers toward a consultation, an accepted live transfer, or a message for follow-up.
+A business phone solution for **a working technology firm**, designed and built by Edward Thornton with Dialogflow CX, Gemini on Vertex AI, FastAPI on Cloud Run, and BigQuery. Maya captures caller details, answers service questions, and guides callers toward a consultation, an accepted live transfer, or a message for follow-up.
 
-The business purpose is to turn an incoming inquiry into an actionable next step, preserve context for the person responding, and make follow-up measurable. The repository documents the operating solution, real-call validation, and the next improvements. The BigQuery dataset is created, with backend ingestion prepared and tested offline; live ingestion remains to be deployed and verified. Power BI reporting is planned.
+The business purpose is to turn an incoming inquiry into an actionable next step, preserve context for the person responding, and make follow-up measurable. BigQuery is now part of the project: the dataset, lead and event tables, reporting views, and backend ingestion are deployed. Power BI is the next milestone. The first live database write remains to be verified.
 
 **Checkpoint: November 1, 2026.** The owner confirmed the press-1 transfer now works after correcting the destination number. The published Studio flow routes unaccepted transfers back to Maya for message capture; decline/no-answer checks and end-to-end message delivery remain to be verified.
+
+BigQuery ingestion is deployed in Cloud Run revision `cx-backend-00006-ml5`, serving 100% of traffic. The dataset is `csd-dialogflow-cx-2026.maya_analytics` in `us-central1`.
 
 ## Phone flow
 
@@ -21,14 +23,14 @@ The business purpose is to turn an incoming inquiry into an actionable next step
 | Booking and alerts | Booking-link and owner-alert texts received. Customers schedule in Calendly. |
 | Live transfer | Owner confirmed the press-1 transfer works after correcting the destination number. |
 | Missed-call messages | Studio Return is connected to Maya; unanswered return was previously observed. Decline/no-answer screening checks and full message delivery remain unverified. |
-| Analytics | BigQuery tables and reporting views created; dataset access granted to the backend identity. Ingestion code passed offline checks; Cloud Run deployment and live writes remain unverified. Power BI is planned. |
+| Analytics | BigQuery event and lead tables, reporting views, and Cloud Run ingestion deployed. Dataset access granted to the backend identity; 74 offline tests passed. The first live write remains unverified. |
 
 ## Architecture
 
 ```mermaid
 flowchart LR
     accTitle: Maya architecture overview
-    accDescr: Twilio connects calls to Maya. The backend uses Gemini and sends booking links. Twilio also transfers calls to the owner.
+    accDescr: Twilio connects calls to Maya. The backend uses Gemini, sends booking links, and provides BigQuery event and lead ingestion. Twilio also transfers calls to the owner.
 
     phone("`**Phone calls**
 Twilio Voice + Studio`")
@@ -43,9 +45,13 @@ Twilio + Calendly`")
     owner("`**Live transfer**
 Owner's phone`")
 
+    data("`**Events and leads**
+BigQuery`")
+
     phone --> maya --> backend
     backend <--> ai
     backend --> booking
+    backend --> data
     screen("`**Call screening**
 Twilio Function`")
 
@@ -58,10 +64,10 @@ Twilio Function`")
     classDef outcome fill:#ecfdf5,stroke:#86efac,color:#14532d,stroke-width:1.5px
     class phone,maya,backend,screen core
     class ai intelligence
-    class booking,owner outcome
+    class booking,owner,data outcome
 ```
 
-Twilio connects calls to Maya. The backend supports AI answers and booking texts. Studio invokes a protected Twilio Function for press-1 screening and resumes the message-taking widget when the function returns an unaccepted transfer.
+Twilio connects calls to Maya. The backend supports AI answers, booking texts, and structured event and lead writes to BigQuery. Studio invokes a protected Twilio Function for press-1 screening and resumes the message-taking widget when the function returns an unaccepted transfer.
 
 | Component | Responsibility |
 | --- | --- |
@@ -70,6 +76,7 @@ Twilio connects calls to Maya. The backend supports AI answers and booking texts
 | FastAPI on Cloud Run | Authenticate fulfillment requests and coordinate discovery and customer actions. |
 | Gemini on Vertex AI | Use recent conversation context for extraction, answers, corrections, and summaries. |
 | Twilio Messaging + Calendly | Send permission-based booking links and owner alerts; customers choose a meeting time externally. |
+| BigQuery | Store structured backend events and lead snapshots; provide deduplicated and aggregate reporting views. |
 
 Security, design decisions, and failure handling are covered in the [architecture notes](docs/architecture.md).
 
@@ -95,6 +102,7 @@ These observations are bounded evidence, not a guarantee of complete security. C
 | Oct 29 | Added conversation history, correction handling, reviewed policy answers, and model evaluation. Approved Maya’s new greeting. |
 | Oct 30 | Confirmed a working cell transfer and added the transfer-status split in Studio. |
 | Oct 31–Nov 1 | Added protected call screening, published the Return route to Maya, corrected the owner destination, and confirmed the press-1 transfer works. |
+| Nov 1 | Created BigQuery event/lead tables and reporting views, granted dataset access, and deployed backend ingestion to Cloud Run. |
 
 ## Validation
 
@@ -120,13 +128,13 @@ The real-model evaluator is `scripts/evaluate_conversation.py`. Deployment conte
 - [BigQuery analytics setup and deployment](docs/analytics.md) — tables, views, call identity, live verification, and ingestion limits.
 - [Portfolio page source](docs/dialogflow-cx.html) · [Current checkpoint](docs/project-notes.md) · [Detailed build history](docs/build-history.md) · [Security review](docs/security.md).
 
-## Next milestones
+## Next milestone
 
-1. **BigQuery:** deploy ingestion, preserve call IDs in Studio, and verify live rows; add telephony result events.
-2. **Power BI:** connect reporting views for observed call activity, service demand, and follow-up needs.
+**Power BI:** connect BigQuery reporting views to a dashboard for observed call activity, service demand, and follow-up needs.
 
 **Purpose:** connect real caller interactions to measurable business outcomes and better follow-up.
 
 Message transcripts currently use Cloud Logging.
+
 
 

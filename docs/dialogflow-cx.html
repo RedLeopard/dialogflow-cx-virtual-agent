@@ -8,11 +8,11 @@
   <meta content="#080b09" name="theme-color" />
   <title>Dialogflow CX Virtual Agent | Maya | Edward Thornton</title>
   <meta
-    content="Maya, Edward Thornton’s Dialogflow CX phone assistant for a technology firm, combining Gemini on Vertex AI, authenticated Cloud Run fulfillment, booking texts, and live transfers."
+    content="Maya, Edward Thornton’s Dialogflow CX phone assistant for a technology firm, combining Gemini on Vertex AI, Cloud Run fulfillment, BigQuery event and lead storage, booking texts, and live transfers."
     name="description" />
   <meta content="Dialogflow CX Virtual Agent | Edward Thornton" property="og:title" />
   <meta
-    content="Explore Maya’s phone experience, Twilio Studio call flow, cloud architecture, validation, and development timeline."
+    content="Explore Maya’s phone experience, cloud architecture, deployed BigQuery integration, and development timeline. Power BI reporting is the next milestone."
     property="og:description" />
   <meta content="website" property="og:type" />
   <link href="https://fonts.googleapis.com" rel="preconnect" />
@@ -1687,11 +1687,11 @@
           <div>
             <p class="eyebrow">GOOGLE CLOUD / CONVERSATIONAL AI</p>
             <h1>Dialogflow CX<br /><span>Virtual Agent.</span></h1>
-            <p class="lead">Maya is a business phone solution for a working technology firm. It captures caller details, uses Gemini on Vertex AI to understand project needs, and routes callers toward a consultation, an accepted live transfer, or a message for follow-up.</p>
+            <p class="lead">Maya is a business phone solution for a working technology firm. It captures caller details, uses Gemini on Vertex AI to understand project needs, and routes callers toward a consultation, an accepted live transfer, or a message for follow-up. BigQuery adds structured event and lead storage.</p>
             <div class="actions"><a class="button" href="#call-flow">See the call flow <span>↓</span></a><a
                 class="button ghost" href="https://github.com/RedLeopard/dialogflow-cx-virtual-agent" rel="noopener"
                 target="_blank">View source <span>↗</span></a></div>
-            <p class="status-line"><span class="status-dot"></span>PRESS-1 TRANSFER CONFIRMED · ANALYTICS PLANNED</p>
+            <p class="status-line"><span class="status-dot"></span>BIGQUERY INTEGRATION DEPLOYED · POWER BI NEXT</p>
           </div>
           <div aria-label="Illustrative project discovery showing a website migration from AWS to Google Cloud"
             class="hero-art">
@@ -1732,7 +1732,7 @@
     <div class="tech-band">
       <div class="wrap"><span class="label">THE PROJECT<br />CLOUD
           STACK</span><strong>Twilio</strong><i>+</i><strong>Dialogflow CX</strong><i>+</i><strong>Cloud
-          Run</strong><i>+</i><strong>Vertex AI</strong><i>+</i><strong>Python / FastAPI</strong></div>
+          Run</strong><i>+</i><strong>Vertex AI</strong><i>+</i><strong>BigQuery</strong><i>+</i><strong>Python / FastAPI</strong></div>
     </div>
 
     <section class="architecture-overview" id="architecture" aria-labelledby="architecture-overview-heading">
@@ -1740,13 +1740,13 @@
         <div class="section-heading">
           <div><p class="eyebrow">SOLUTION ARCHITECTURE / AT A GLANCE</p>
             <h2 id="architecture-overview-heading">One conversation.<br /><span>A connected cloud system.</span></h2></div>
-          <p>Twilio handles the call, Dialogflow CX manages the conversation, and authenticated Cloud Run fulfillment coordinates AI answers and customer actions.</p>
+          <p>Twilio handles the call, Dialogflow CX manages the conversation, and authenticated Cloud Run fulfillment coordinates AI answers, customer actions, and structured BigQuery writes.</p>
         </div>
         <figure class="system-map" aria-describedby="architecture-map-caption">
           <div class="map-toolbar"><span>MAYA / SERVICE &amp; HANDOFF MAP</span><div class="map-legend"><span><i></i>Voice + actions</span><span><i class="ai-key"></i>AI</span><span><i class="human-key"></i>Human handoff</span></div></div>
           <svg class="map-wide" viewBox="0 0 1146 450" role="img" aria-labelledby="map-wide-title map-wide-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="map-wide-title">Maya solution architecture</title>
-            <desc id="map-wide-desc">Twilio Voice and Studio connect calls to Maya in Dialogflow CX. Maya invokes authenticated FastAPI fulfillment on Cloud Run, which uses Gemini on Vertex AI and sends Twilio booking texts linking to Calendly. For live handoff, a Twilio Function screens the owner with press-1 acceptance. Accepted calls connect to the owner; unaccepted transfers return to Maya for message capture.</desc>
+            <desc id="map-wide-desc">Twilio Voice and Studio connect calls to Maya in Dialogflow CX. Maya invokes authenticated FastAPI fulfillment on Cloud Run, which uses Gemini on Vertex AI, sends Twilio booking texts linking to Calendly, and provides structured event and lead ingestion into BigQuery. For live handoff, a Twilio Function screens the owner with press-1 acceptance. Accepted calls connect to the owner; unaccepted transfers return to Maya for message capture.</desc>
             <defs>
       <marker id="wide-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9 Z" fill="#9dc577"/></marker>
       <marker id="wide-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#a2afa0"/></marker>
@@ -1786,10 +1786,18 @@
       <text x="1002.0" y="357" class="map-service" font-size="15">Twilio + Calendly</text>
       <text x="1002.0" y="378" class="map-detail" font-size="12">Customer selects a time</text>
     </g>
+            <path class="map-edge" d="M670 162 V190 H144 V306" marker-end="url(#wide-arrow)"/>
+            <text class="map-label" x="144" y="284" text-anchor="middle">Events + leads</text>
+            <g class="map-node">
+              <rect x="30" y="306" width="228" height="104" rx="12" fill="#142824" stroke="#65a795" stroke-opacity=".8"/>
+              <text x="144" y="335" class="map-title" font-size="21">Data layer</text>
+              <text x="144" y="357" class="map-service" font-size="15">BigQuery</text>
+              <text x="144" y="378" class="map-detail" font-size="12">Event + lead tables</text>
+            </g>
           </svg>
           <svg class="map-narrow" viewBox="0 0 420 700" role="img" aria-labelledby="map-narrow-title map-narrow-desc" xmlns="http://www.w3.org/2000/svg">
             <title id="map-narrow-title">Maya solution architecture, mobile layout</title>
-            <desc id="map-narrow-desc">Twilio connects callers to Dialogflow CX. Cloud Run fulfillment uses Vertex AI and sends booking texts. A separate live-handoff path screens the owner with press-1 acceptance and returns unaccepted transfers to Maya.</desc>
+            <desc id="map-narrow-desc">Twilio connects callers to Dialogflow CX. Cloud Run fulfillment uses Vertex AI, sends booking texts, and provides BigQuery event and lead ingestion. A separate live-handoff path screens the owner with press-1 acceptance and returns unaccepted transfers to Maya.</desc>
             <defs>
       <marker id="narrow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9 Z" fill="#9dc577"/></marker>
       <marker id="narrow-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#a2afa0"/></marker>
@@ -1829,6 +1837,14 @@
       <text x="102.0" y="635" class="map-service" font-size="14">Twilio + Calendly</text>
       <text x="102.0" y="656" class="map-detail" font-size="12">Customer selects a time</text>
     </g>
+            <path class="map-edge" d="M190 360 H210 V628 H230" marker-end="url(#narrow-arrow)"/>
+            <text class="map-label" x="318" y="570" text-anchor="middle">Events + leads</text>
+            <g class="map-node">
+              <rect x="230" y="584" width="176" height="88" rx="12" fill="#142824" stroke="#65a795" stroke-opacity=".8"/>
+              <text x="318" y="613" class="map-title" font-size="18">Data layer</text>
+              <text x="318" y="635" class="map-service" font-size="14">BigQuery</text>
+              <text x="318" y="656" class="map-detail" font-size="12">Event + lead tables</text>
+            </g>
           </svg>
           <figcaption id="architecture-map-caption"><span>Solid lines show service calls and handoffs. The dashed path returns an unaccepted transfer to Maya for a message.</span><a href="#architecture-details">Explore the design decisions ↘</a></figcaption>
         </figure>
@@ -1849,7 +1865,7 @@
         <p>The first call should help a customer move forward without making them repeat their story or navigate a long
           menu.</p>
         <p>I built Maya for a real business workflow: <strong>understand the inquiry, connect the caller to the right next step, and preserve context for follow-up.</strong> Dialogflow manages the conversation while the backend keeps actions separate from generated replies.</p>
-        <div class="purpose-note">The next phase closes the loop with BigQuery call history and Power BI reporting, so call outcomes can guide a better business response.</div>
+        <div class="purpose-note">BigQuery is deployed as the project’s event and lead data layer. The next milestone is Power BI reporting, connecting that data to clearer business follow-up.</div>
       </div>
     </section>
     <section aria-labelledby="flow-heading" class="flow-showcase" id="call-flow">
@@ -2024,7 +2040,7 @@
           <h2>Conversation in front.<br /><span>Cloud engineering behind it.</span></h2>
         </div>
         <p>Twilio handles the phone channel and live transfer. Dialogflow manages state, and an authenticated Cloud Run
-          webhook coordinates Gemini and customer actions.</p>
+          webhook coordinates Gemini, customer actions, and BigQuery event and lead writes.</p>
       </div>
       <ol class="architecture-flow">
         <li class="arch-node"><small>01 / PHONE CHANNEL</small>
@@ -2037,7 +2053,7 @@
         </li>
         <li class="arch-node"><small>03 / FULFILLMENT</small>
           <h3>Cloud Run + FastAPI</h3>
-          <p>Validates webhook requests and coordinates booking texts and notifications.</p>
+          <p>Coordinates authenticated fulfillment, notifications, and structured writes to BigQuery.</p>
         </li>
         <li class="arch-node"><small>04 / UNDERSTANDING</small>
           <h3>Vertex AI + Gemini</h3>
@@ -2065,7 +2081,7 @@
             <p class="eyebrow">05 / CURRENT BUILD STATUS</p>
             <h2>Working milestones.<br /><span>A clear next phase.</span></h2>
           </div>
-          <p>A working phone integration with owner-confirmed press-1 transfer and a published message-return route. Fallback behavior and message delivery are the next checks.</p>
+          <p>A working phone integration with screened transfers, a published message-return route, and deployed BigQuery ingestion. Power BI is the next milestone.</p>
         </div>
         <div class="progress-grid">
           <article class="progress-card complete">
@@ -2089,18 +2105,17 @@
             </ul>
           </article>
           <article class="progress-card planned">
-            <p class="progress-label">NEXT ITERATION</p>
-            <h3>Analytics and business follow-up</h3>
+            <p class="progress-label">NEXT MILESTONE</p>
+            <h3>Power BI reporting</h3>
             <ul>
-              <li>Verify ignored, declined, and failed calls through the screened transfer route.</li>
-              <li>Add structured call and outcome history in BigQuery.</li>
-              <li>Build Power BI reports for service demand, accepted transfers, and follow-up needs.</li>
-              <li>Continue real-call voice and speech-recognition evaluation.</li>
+              <li>Connect the BigQuery reporting views to Power BI.</li>
+              <li>Visualize observed call activity and requested services.</li>
+              <li>Surface leads needing follow-up in a business dashboard.</li>
             </ul>
           </article>
         </div>
-        <div class="analytics-plan" aria-labelledby="analytics-plan-heading"><p class="eyebrow">PLANNED / BIGQUERY + POWER BI</p><h3 id="analytics-plan-heading">From answered calls to business insight.</h3><p>BigQuery will preserve structured call and action events. Power BI will report on call volume, actual transfer acceptance, message outcomes, requested services, and follow-up needs. That feedback will help improve how the business responds to inquiries from the first conversation through the next action.</p><p class="planned-scope">Roadmap only: analytics ingestion and dashboards are not implemented yet. Booking-link sends and confirmed appointments will be tracked separately. Reporting views should minimize caller-identifying information.</p></div>
-        <p class="progress-footnote">Checkpoint: November 1, 2026. Phone-transfer and SMS observations are owner-reported tests. The Studio screenshot shows published return wiring. Fallback and message-delivery verification, database persistence, and audio recording remain unfinished. Appointment selection happens in Calendly. <a
+        <div class="analytics-plan" aria-labelledby="analytics-plan-heading"><p class="eyebrow">DEPLOYED / BIGQUERY</p><h3 id="analytics-plan-heading">A data foundation for better follow-up.</h3><p>BigQuery is now part of Maya’s cloud architecture. Event and lead tables, deduplicated reporting views, and Cloud Run ingestion are deployed. The backend captures structured observations for service demand and business follow-up, with Power BI reporting as the next milestone.</p><p class="planned-scope">Deployment confirmed November 1, 2026. The first live database write remains to be verified. Booking-link sends, accepted transfers, and confirmed appointments remain distinct outcomes.</p></div>
+        <p class="progress-footnote">Checkpoint: November 1, 2026. Phone-transfer and SMS observations are owner-reported tests. The Studio screenshot shows published return wiring. BigQuery tables, views, and backend ingestion are deployed; live data writes remain unverified. Appointment selection happens in Calendly. <a
             href="https://github.com/RedLeopard/dialogflow-cx-virtual-agent#readme" rel="noopener" target="_blank">View
             the current project checkpoint ↗</a></p>
       </div>
@@ -2156,6 +2171,12 @@
             <p>Published press-1 screening and the Return route to Maya. Corrected the destination number and confirmed the transfer works.</p>
           </div>
         </li>
+        <li><time datetime="2026-11-01">NOV 01<span>2026</span></time>
+          <div>
+            <h3>BigQuery integration deployed</h3>
+            <p>Created event and lead tables, reporting views, and dataset access. Deployed the ingestion-enabled backend to Cloud Run.</p>
+          </div>
+        </li>
       </ol>
     </section>
     <section class="section wrap validation">
@@ -2169,9 +2190,9 @@
       <div class="validation-list">
         <article class="check"><span class="number">01</span>
           <div>
-            <h3>54 offline tests at the last full run</h3>
+            <h3>74 offline tests passed</h3>
             <p>The backend suite covers contact intake, conversation orchestration, booking and message actions, failure
-              paths, and generated configuration. Model and notification responses are mocked in these tests.</p>
+              paths, generated configuration, and BigQuery analytics. Model, notification, and database responses are mocked in these tests.</p>
           </div>
         </article>
         <article class="check"><span class="number">02</span>
