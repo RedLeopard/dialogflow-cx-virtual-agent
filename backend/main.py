@@ -10,6 +10,7 @@ from backend.contact import digits, first_name, is_usable_us_number, spoken_numb
 from backend.discovery import discover_project, summarize_voicemail
 from backend.conversation import generate_turn, history_from
 from backend.notify import log, send_email, send_sms
+from backend import analytics
 
 app = FastAPI(title="Cloud Systems Direct - Dialogflow CX Fulfillment")
 
@@ -33,6 +34,7 @@ class SessionInfo(BaseModel):
 class WebhookRequest(BaseModel):
     fulfillmentInfo: FulfillmentInfo
     sessionInfo: SessionInfo
+    detectIntentResponseId: str | None = None
 
 
 # ------------------------------------------------------------------ helpers
@@ -306,9 +308,9 @@ def voicemail_save(params: dict):
     if delivered:
         callback = f", and they'll get back to you at the number ending in {ending_in(number)}" if number else ""
         return respond(f"{recap} I've sent your message to the team{callback}. Thanks for calling {COMPANY}. Goodbye.",
-                       voicemail_delivered=True)
+                       voicemail_delivered=True, analytics_message_summary=summary or None)
     return respond(f"{recap} I'm having trouble delivering messages right now, so please call back a little later. "
-                   "Sorry about that.", voicemail_delivered=False)
+                   "Sorry about that.", voicemail_delivered=False, analytics_message_summary=summary or None)
 
 
 HANDLERS = {
@@ -337,4 +339,14 @@ def webhook(request: WebhookRequest):
     handler = HANDLERS.get(request.fulfillmentInfo.tag)
     if handler is None:
         raise HTTPException(status_code=400, detail="Unsupported fulfillment tag")
-    return handler(request.sessionInfo.parameters)
+    response = handler(request.sessionInfo.parameters)
+    try:
+        state, events, leads = analytics.records_for(request.model_dump(), response)
+        response["sessionInfo"]["parameters"].update(state)
+        if events or leads:
+            analytics.write_records(events, leads)
+    except Exception as exc:
+        # Do not fail a call or expose caller content when analytics is unavailable.
+        log("analytics_failed", stage="prepare", error_type=type(exc).__name__)
+    return response
+

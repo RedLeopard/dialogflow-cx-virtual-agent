@@ -47,7 +47,7 @@ The replacement screenshot is [`images/cx-phone.jpg`](images/cx-phone.jpg) and d
 
 `voicemail_save` captures the transcribed `voicemail_message`, generates a summary, and attempts notifications to `OWNER_CELL` and `OWNER_EMAIL`. The SMS includes caller details and a summary; the email body includes the full transcript. The full transcribed message is also written to Cloud Logging.
 
-A dedicated lead database and audio recordings are not implemented. Email code exists, but no successful email-alert delivery has been verified. SMTP configuration was absent from the last Cloud Run configuration shared in this session. A provider accepting a notification does not prove delivery to the recipient.
+The owner created the BigQuery analytics dataset and granted the backend identity dataset access on November 1. Backend ingestion code is tested offline but still needs Cloud Run deployment and a live row check; see [analytics deployment](analytics.md). Audio recording was dropped from the current plan and remains disabled. Email code exists, but no successful email-alert delivery has been verified. SMTP configuration was absent from the last Cloud Run configuration shared in this session. A provider accepting a notification does not prove delivery to the recipient.
 
 ## Cloud and deployment context
 
@@ -119,12 +119,13 @@ The legacy `transfer_to_owner` and `check_transfer` widgets remain on the canvas
 Prefer terminal commands for supported GCP work and use the console for Studio wiring. Record success from returned evidence and real tests; keep generated dialogue, provider acceptance, delivery, and completed appointments as distinct outcomes.
 
 
-## Planned BigQuery and Power BI extension
+## BigQuery setup and planned Power BI extension
 
-The owner selected BigQuery with Power BI as the next analytics direction. This is a roadmap entry only: no BigQuery dataset, ingestion pipeline, reporting view, or Power BI dashboard has been created by this documentation change.
+The owner's Terminal output confirms `maya_analytics` in `csd-dialogflow-cx-2026`, region `us-central1`: `call_events`, `leads`, and three reporting/deduplication views. The creation assertion and view queries passed. The dataset-scoped `roles/bigquery.dataEditor` grant completed for `cx-backend@csd-dialogflow-cx-2026.iam.gserviceaccount.com`. Backend ingestion source is tested offline; deployment, Studio call-ID mappings, and live writes remain unverified. Power BI is not connected. See the [analytics checkpoint and deployment steps](analytics.md).
 
 Define structured call/event identifiers, timestamps, service requests, transfer and message outcomes, notification state, and SMS consent. Deduplicate retries, measure transfer acceptance from telephony results, and avoid raw caller identifiers in aggregate reporting views. Use scheduled Power BI Import refreshes initially. Record a confirmed booking only when a Calendly confirmation integration supplies evidence.
 
 The purpose is an end-to-end business feedback loop: capture and understand the inquiry, route or take a message, preserve the result, measure missed opportunities, and improve follow-up. Maya is a working phone solution for the technology firm, with further validation and analytics still being developed.
 
 The [security review](security.md) documents Secret Manager references, the runtime authentication boundaries, a current/history scan, and verification limits. No authentication credentials were confirmed exposed in the review; one repeated configuration-key scanner match remains unclassified. No security guarantee or live IAM verification should be inferred from a repository scan.
+

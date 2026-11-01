@@ -2,7 +2,7 @@
 
 A business phone solution for **a working technology firm**, designed and built by Edward Thornton with Dialogflow CX, Gemini on Vertex AI, and FastAPI on Cloud Run. Maya captures caller details, answers service questions, and guides callers toward a consultation, an accepted live transfer, or a message for follow-up.
 
-The business purpose is to turn an incoming inquiry into an actionable next step, preserve context for the person responding, and make follow-up measurable. The repository documents the operating solution, real-call validation, and the next improvements. BigQuery and Power BI are planned additions to close the loop from caller interaction to business insight.
+The business purpose is to turn an incoming inquiry into an actionable next step, preserve context for the person responding, and make follow-up measurable. The repository documents the operating solution, real-call validation, and the next improvements. The BigQuery dataset is created, with backend ingestion prepared and tested offline; live ingestion remains to be deployed and verified. Power BI reporting is planned.
 
 **Checkpoint: November 1, 2026.** The owner confirmed the press-1 transfer now works after correcting the destination number. The published Studio flow routes unaccepted transfers back to Maya for message capture; decline/no-answer checks and end-to-end message delivery remain to be verified.
 
@@ -21,7 +21,7 @@ The business purpose is to turn an incoming inquiry into an actionable next step
 | Booking and alerts | Booking-link and owner-alert texts received. Customers schedule in Calendly. |
 | Live transfer | Owner confirmed the press-1 transfer works after correcting the destination number. |
 | Missed-call messages | Studio Return is connected to Maya; unanswered return was previously observed. Decline/no-answer screening checks and full message delivery remain unverified. |
-| Analytics | BigQuery event storage and Power BI reporting are planned; no analytics pipeline or dashboard is implemented yet. |
+| Analytics | BigQuery tables and reporting views created; dataset access granted to the backend identity. Ingestion code passed offline checks; Cloud Run deployment and live writes remain unverified. Power BI is planned. |
 
 ## Architecture
 
@@ -98,7 +98,7 @@ These observations are bounded evidence, not a guarantee of complete security. C
 
 ## Validation
 
-- **54 offline tests** passed at the last full run, with model responses and notifications mocked.
+- **74 offline tests** passed, including analytics row construction, identity, consent, retry IDs, outcome semantics, and failure isolation. Model responses, notifications, and database writes are mocked.
 - **13 real Vertex requests** completed with zero errors and **1.20–5.32 seconds per generation** in one evaluation. Follow-up fixes constrained unsupported policy answers; these timings do not measure full calls.
 - **Phone checks:** owner-confirmed press-1 transfer, previously observed unanswered return to Maya, and received booking/handoff texts. The new screening route still needs decline/no-answer checks and a complete message-delivery test.
 
@@ -117,15 +117,16 @@ The real-model evaluator is `scripts/evaluate_conversation.py`. Deployment conte
 - [`dialogflow/agent/`](dialogflow/agent/) — versioned Dialogflow configuration.
 - [`scripts/`](scripts/) and [`tests/`](tests/) — build/apply helpers, model evaluation, and offline checks.
 - [`twilio/functions/maya-transfer.js`](twilio/functions/maya-transfer.js) — deployed screening function source; [setup and validation](docs/project-notes.md#screened-transfer-setup).
+- [BigQuery analytics setup and deployment](docs/analytics.md) — tables, views, call identity, live verification, and ingestion limits.
 - [Portfolio page source](docs/dialogflow-cx.html) · [Current checkpoint](docs/project-notes.md) · [Detailed build history](docs/build-history.md) · [Security review](docs/security.md).
 
 ## Next milestones
 
-1. **Full-call recording:** capture Maya conversations and live handoffs, with consent handling and restricted playback.
-2. **BigQuery:** store structured call events and outcomes for analysis.
-3. **Power BI:** report on call volume, transfer acceptance, service demand, and follow-up needs.
+1. **BigQuery:** deploy ingestion, preserve call IDs in Studio, and verify live rows; add telephony result events.
+2. **Power BI:** connect reporting views for observed call activity, service demand, and follow-up needs.
 
 **Purpose:** connect real caller interactions to measurable business outcomes and better follow-up.
 
 Message transcripts currently use Cloud Logging.
+
 
