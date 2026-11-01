@@ -6,3 +6,13 @@ __pycache__
 *.py[cod]
 .DS_Store
 tests/
+
+# Keep common credential and private-key files out of build contexts
+**/*credentials*.json
+**/*service-account*.json
+**/*service_account*.json
+**/application_default_credentials.json
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx

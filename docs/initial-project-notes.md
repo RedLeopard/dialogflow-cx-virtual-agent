@@ -1,5 +1,7 @@
 # Historical checkpoint
 
+Public documentation uses an anonymized firm name. Historical technical settings and outcomes are retained.
+
 The notes below are preserved from the October 27 checkpoint. For current status, see [project-notes.md](project-notes.md).
 
 ---
@@ -27,11 +29,11 @@ A later call was reported to sound clunky and did not identify the company. Full
 
 ### Agreed next experience
 
-The phone experience should identify Cloud Systems Direct, superseding the earlier independent-branding plan.
+The phone experience should identify the technology firm, superseding the earlier independent-branding plan.
 
 Opening:
 
-> Thanks for calling Cloud Systems Direct. I'm your virtual assistant. Before we get started, may I have your name?
+> Thanks for calling the technology firm. I'm your virtual assistant. Before we get started, may I have your name?
 
 Then:
 

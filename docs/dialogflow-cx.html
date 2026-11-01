@@ -8,7 +8,7 @@
   <meta content="#080b09" name="theme-color" />
   <title>Dialogflow CX Virtual Agent | Maya | Edward Thornton</title>
   <meta
-    content="Maya, Edward Thornton’s Dialogflow CX phone assistant for Cloud Systems Direct, combining Gemini on Vertex AI, authenticated Cloud Run fulfillment, booking texts, and live transfers."
+    content="Maya, Edward Thornton’s Dialogflow CX phone assistant for a technology firm, combining Gemini on Vertex AI, authenticated Cloud Run fulfillment, booking texts, and live transfers."
     name="description" />
   <meta content="Dialogflow CX Virtual Agent | Edward Thornton" property="og:title" />
   <meta
@@ -1648,6 +1648,18 @@
       .system-map figcaption { padding: 15px; font-size: 11px; }
       .map-label { font-size: 13px; }
     }
+
+    /* Credential handling made visible without exposing secret values. */
+    .security-story { margin-top: 24px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .security-story article { padding: 22px; background: #101a13; border: 1px solid #c1fa6a25; border-radius: 8px; }
+    .security-story small { display: block; color: #a9c49a; font: 9px/1.6 var(--mono); letter-spacing: 1px; margin-bottom: 10px; }
+    .security-story h3 { color: #e6eddc; font-size: 18px; margin-bottom: 10px; }
+    .security-story p { color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .analytics-plan { margin-top: 26px; border: 1px solid #c1fa6a35; border-radius: 9px; padding: 24px; background: #132016; }
+    .analytics-plan h3 { font-size: 22px; margin: 9px 0 12px; }
+    .analytics-plan p:not(.eyebrow) { color: #b3c3a8; font-size: 13px; line-height: 1.8; max-width: 900px; }
+    .analytics-plan .planned-scope { color: #9eaf94; font-size: 11px !important; margin-top: 12px; }
+    @media (max-width: 700px) { .security-story { grid-template-columns: 1fr; } .security-story article { padding: 19px; } .analytics-plan { padding: 20px; } }
   </style>
   <link href="assets/favicon.svg" rel="icon" type="image/svg+xml" />
 </head>
@@ -1675,14 +1687,11 @@
           <div>
             <p class="eyebrow">GOOGLE CLOUD / CONVERSATIONAL AI</p>
             <h1>Dialogflow CX<br /><span>Virtual Agent.</span></h1>
-            <p class="lead">Maya is a phone assistant for Cloud Systems Direct. It captures caller details, uses Gemini
-              on Vertex AI to understand project needs, and helps customers take the next step: a consultation, a live
-              conversation, or a message for the team.</p>
+            <p class="lead">Maya is a business phone solution for a working technology firm. It captures caller details, uses Gemini on Vertex AI to understand project needs, and routes callers toward a consultation, an accepted live transfer, or a message for follow-up.</p>
             <div class="actions"><a class="button" href="#call-flow">See the call flow <span>↓</span></a><a
                 class="button ghost" href="https://github.com/RedLeopard/dialogflow-cx-virtual-agent" rel="noopener"
                 target="_blank">View source <span>↗</span></a></div>
-            <p class="status-line"><span class="status-dot"></span>LIVE TRANSFER TESTED · MISSED-CALL ROUTING IN
-              PROGRESS</p>
+            <p class="status-line"><span class="status-dot"></span>PRESS-1 TRANSFER CONFIRMED · ANALYTICS PLANNED</p>
           </div>
           <div aria-label="Illustrative project discovery showing a website migration from AWS to Google Cloud"
             class="hero-art">
@@ -1823,6 +1832,11 @@
           </svg>
           <figcaption id="architecture-map-caption"><span>Solid lines show service calls and handoffs. The dashed path returns an unaccepted transfer to Maya for a message.</span><a href="#architecture-details">Explore the design decisions ↘</a></figcaption>
         </figure>
+        <div class="security-story" aria-label="Credential and authentication design">
+          <article><small>CREDENTIAL STORAGE</small><h3>Google Secret Manager</h3><p>The documented deployment stores the Twilio Auth Token in Secret Manager and supplies it to Cloud Run through a secret-backed environment variable. The source reads the value at runtime.</p></article>
+          <article><small>IDENTITY &amp; ACCESS</small><h3>Service identity</h3><p>The setup grants the backend identity access to the Twilio secret. Dialogflow’s exported webhook configuration uses service-agent ID tokens for Cloud Run invocation.</p></article>
+          <article><small>TELEPHONY BOUNDARY</small><h3>Protected call screening</h3><p>The transfer Function uses Twilio’s Protected visibility. Unsigned requests are checked by the platform before the call-screening handler runs.</p></article>
+        </div>
       </div>
     </section>
 
@@ -1834,11 +1848,8 @@
       <div class="purpose-copy">
         <p>The first call should help a customer move forward without making them repeat their story or navigate a long
           menu.</p>
-        <p>I built Maya to <strong>capture the essentials, answer service questions, and guide the caller toward a
-            consultation, a live transfer, or a message.</strong> Dialogflow manages the conversation while the backend
-          keeps actions separate from generated replies.</p>
-        <div class="purpose-note">The goal is a useful outcome from the conversation, with enough context for the person
-          who follows up.</div>
+        <p>I built Maya for a real business workflow: <strong>understand the inquiry, connect the caller to the right next step, and preserve context for follow-up.</strong> Dialogflow manages the conversation while the backend keeps actions separate from generated replies.</p>
+        <div class="purpose-note">The next phase closes the loop with BigQuery call history and Power BI reporting, so call outcomes can guide a better business response.</div>
       </div>
     </section>
     <section aria-labelledby="flow-heading" class="flow-showcase" id="call-flow">
@@ -1855,11 +1866,11 @@
           <p class="flow-state"><span></span>Press-1 transfer confirmed. Fallback and delivery checks next.</p>
         </div>
         <figure class="flow-figure"><a aria-label="Open the full-size Twilio Studio call-flow screenshot"
-            class="flow-preview" href="images/cx-phone.jpg?v=20261101" rel="noopener" target="_blank"><img
+            class="flow-preview" href="images/cx-phone.jpg?v=20261101-redacted" rel="noopener" target="_blank"><img
               alt="Published Twilio Studio flow: Maya hands off to screened_transfer, whose Return connects to missed_call_message. Legacy transfer widgets remain visible."
-              decoding="async" height="1128" loading="lazy" src="images/cx-phone.jpg?v=20261101" width="2047" /><span
+              decoding="async" height="931" loading="lazy" src="images/cx-phone.jpg?v=20261101-redacted" width="1690" /><span
               class="flow-expand">View full size ↗</span></a>
-          <figcaption>Published Studio flow: Maya → screened transfer → message-taking Return path. The older transfer/status widgets remain visible beside the active route. Click to enlarge.</figcaption>
+          <figcaption>Published Studio flow: Maya → screened transfer → message-taking Return path. The older transfer/status widgets remain visible beside the active route. The owner’s phone number is masked as xxx-xxxx. Click to enlarge.</figcaption>
         </figure>
       </div>
     </section>
@@ -2037,7 +2048,7 @@
         <div>
           <h3>Authenticated service boundaries</h3>
           <p>Dialogflow invokes the private Cloud Run backend using service-agent ID tokens. A dedicated runtime service
-            account accesses Vertex AI, and messaging credentials are referenced through Secret Manager.</p>
+            account accesses Vertex AI, and the Twilio Auth Token is referenced from Google Secret Manager as a runtime secret. Current IAM grants, secret versions, and caller-data retention remain operational verification items.</p>
         </div>
         <div>
           <h3>Latency and operational choices</h3>
@@ -2079,15 +2090,16 @@
           </article>
           <article class="progress-card planned">
             <p class="progress-label">NEXT ITERATION</p>
-            <h3>Reliability and follow-up</h3>
+            <h3>Analytics and business follow-up</h3>
             <ul>
               <li>Verify ignored, declined, and failed calls through the screened transfer route.</li>
-              <li>Persist leads in a dedicated database.</li>
-              <li>Expand approved company knowledge and test more conversation variations.</li>
+              <li>Add structured call and outcome history in BigQuery.</li>
+              <li>Build Power BI reports for service demand, accepted transfers, and follow-up needs.</li>
               <li>Continue real-call voice and speech-recognition evaluation.</li>
             </ul>
           </article>
         </div>
+        <div class="analytics-plan" aria-labelledby="analytics-plan-heading"><p class="eyebrow">PLANNED / BIGQUERY + POWER BI</p><h3 id="analytics-plan-heading">From answered calls to business insight.</h3><p>BigQuery will preserve structured call and action events. Power BI will report on call volume, actual transfer acceptance, message outcomes, requested services, and follow-up needs. That feedback will help improve how the business responds to inquiries from the first conversation through the next action.</p><p class="planned-scope">Roadmap only: analytics ingestion and dashboards are not implemented yet. Booking-link sends and confirmed appointments will be tracked separately. Reporting views should minimize caller-identifying information.</p></div>
         <p class="progress-footnote">Checkpoint: November 1, 2026. Phone-transfer and SMS observations are owner-reported tests. The Studio screenshot shows published return wiring. Fallback and message-delivery verification, database persistence, and audio recording remain unfinished. Appointment selection happens in Calendly. <a
             href="https://github.com/RedLeopard/dialogflow-cx-virtual-agent#readme" rel="noopener" target="_blank">View
             the current project checkpoint ↗</a></p>

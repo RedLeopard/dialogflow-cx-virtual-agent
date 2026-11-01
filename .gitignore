@@ -17,3 +17,11 @@ __pycache__/
 
 # Local agent backups
 backups/
+
+# Additional local credential and private-key files
+*service_account*.json
+application_default_credentials.json
+*.pem
+*.key
+*.p12
+*.pfx

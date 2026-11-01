@@ -1,6 +1,6 @@
 # Maya: solution architecture
 
-**Checkpoint: November 1, 2026.** Designed and built by Edward Thornton for Cloud Systems Direct.
+**Checkpoint: November 1, 2026.** Designed and built by Edward Thornton for the technology firm.
 
 Maya helps a caller reach one of three outcomes: book a consultation, speak with the business owner, or leave a message. Service questions and project discovery support that goal. The [system diagram and component map](../README.md#architecture) show the implemented integrations; the screened transfer and Studio return wiring are now implemented, with remaining fallback and delivery checks documented separately.
 
@@ -19,7 +19,7 @@ Maya helps a caller reach one of three outcomes: book a consultation, speak with
 | Voice channel | Twilio's native connector exchanges voice and session information with Dialogflow CX. |
 | Fulfillment ingress | Cloud Run requires authenticated invocation using the Dialogflow service agent's ID token. |
 | Runtime identity | A dedicated Cloud Run service account accesses Vertex AI and the referenced secret. It is separate from the calling Dialogflow service agent. |
-| Credentials | Cloud Run injects the Twilio token from Secret Manager. Credentials stay outside the repository and model prompt. |
+| Credentials | Cloud Run injects the Twilio token from Secret Manager. The documented deployment maps `twilio-auth-token` into `TWILIO_AUTH_TOKEN` using the backend service identity. The source reads it at runtime; current IAM grants and secret versions still require verification. |
 | Observability | Backend structured events, including transcribed messages, go to Cloud Logging. Logs are not a dedicated lead database. |
 
 Cloud Run and Dialogflow are deployed in `us-central1`. The documented Gemini configuration uses Vertex's global endpoint. The Google Cloud box in the diagram groups services by provider; it does not represent a VPC or a single regional boundary. This view documents application architecture rather than a private network topology.
@@ -45,3 +45,9 @@ This design is intended to keep a carrier voicemail answer from automatically co
 
 Email notification code is present; successful delivery is unverified. Dedicated lead persistence, audio recording, and in-call appointment creation are future work. Deployment and acceptance checks are in the [current project checkpoint](project-notes.md).
 
+
+## Planned analytics layer
+
+BigQuery and Power BI are planned additions, not implemented components of the current diagram. Structured call and action events would feed analytical tables and SQL reporting views. Power BI would import those views on a schedule to measure call volume, actual transfer acceptance, message outcomes, and follow-up needs. Analytics collection should be isolated from the live voice response path.
+
+Keep attempted handoffs, accepted connections, notification acceptance, notification delivery, booking-link sends, and confirmed appointments as distinct outcomes. This extends a working business phone solution into an end-to-end system for operational improvement. See the [security review](security.md) for credential handling, audit scope, and caller-data considerations.

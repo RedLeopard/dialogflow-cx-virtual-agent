@@ -1,5 +1,7 @@
 # Detailed build history
 
+Public documentation uses an anonymized firm name. Historical technical settings and outcomes are retained.
+
 This is the previous README, retained as a historical development log. It contains superseded plans, deployment assumptions, cost estimates, and commands. For current status and next work, use the [README](../README.md) and [current checkpoint](project-notes.md). Do not treat old rollout instructions as the current runbook.
 
 ---
@@ -194,11 +196,11 @@ Next priorities:
 5. Add mobile-number confirmation and explicit SMS permission before sending booking links through Twilio.
 6. Add confirmed customer message capture, Twilio voice, and grounded answers from approved service information.
 
-Public-facing branding will remain independent of Cloud Systems Direct.
+Public-facing branding will remain independent of the technology firm.
 
 ## Progress Update: October 27, 2026 - Twilio Voice and Contact Intake
 
-This checkpoint supersedes earlier voice-integration status and branding plans. The phone experience will identify the company as **Cloud Systems Direct**, as requested during live-call review. Earlier sections remain as project history.
+This checkpoint supersedes earlier voice-integration status and branding plans. The phone experience will identify the company as **the technology firm**, as requested during live-call review. Earlier sections remain as project history.
 
 ### Completed Configuration
 
@@ -223,7 +225,7 @@ The exported configuration at `fd28aa5` predates the welcome event patch. Re-exp
 
 Before project discovery, the phone conversation should:
 
-1. Identify Cloud Systems Direct and introduce the virtual assistant.
+1. Identify the technology firm and introduce the virtual assistant.
 2. Ask for the caller's name.
 3. Use the incoming caller number from Twilio when available, after explicitly passing it into Dialogflow session parameters and verifying the mapping.
 4. Ask whether the calling number is the best callback number.
@@ -232,7 +234,7 @@ Before project discovery, the phone conversation should:
 
 Proposed opening:
 
-> Thanks for calling Cloud Systems Direct. I'm your virtual assistant. Before we get started, may I have your name?
+> Thanks for calling the technology firm. I'm your virtual assistant. Before we get started, may I have your name?
 
 Then confirm the preferred callback number and ask:
 
@@ -256,11 +258,11 @@ Detailed resume checkpoint: [Project notes](project-notes.md).
 
 ## Progress Update: October 28, 2026 - Caller Experience v2 (deployed; see live status below)
 
-Implements the agreed company greeting and contact intake, and reworks the copy so the agent sounds like Cloud Systems Direct instead of a generic bot. Committed on branch `caller-experience-v2`. Deployment status is recorded in the next section.
+Implements the agreed company greeting and contact intake, and reworks the copy so the agent sounds like the technology firm instead of a generic bot. Committed on branch `caller-experience-v2`. Deployment status is recorded in the next section.
 
 ### New conversation
 
-> **Agent:** Thanks for calling Cloud Systems Direct, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant. Who am I speaking with today?
+> **Agent:** Thanks for calling the technology firm, where we help businesses with cloud, websites, apps, and digital marketing. I'm the virtual assistant. Who am I speaking with today?
 > **Caller:** Hi, this is Maria.
 > **Agent:** Great to meet you, Maria. If we get disconnected or need to follow up, is the number you're calling from, 3 1 4, 5 5 5, 0 1 2 3, the best one to reach you?
 > **Caller:** Yeah.
@@ -268,7 +270,7 @@ Implements the agreed company greeting and contact intake, and reworks the copy 
 > **Caller:** Our WordPress site on AWS keeps going down and we want to move to Google Cloud without downtime.
 > **Agent (Gemini):** *A short, specific acknowledgment plus one scoping question, for example:* That sounds frustrating, Maria, and a zero-downtime move is very doable to plan for. Roughly when would you like to be fully on Google Cloud?
 > **Caller:** Within the next two months.
-> **Agent:** Thank you, that gives our team a great head start. The next step is a 30-minute consultation with a Cloud Systems Direct specialist, and you can pick a time that works for you at calendly dot com slash cloud systems. Thanks for calling Cloud Systems Direct. Have a great day.
+> **Agent:** Thank you, that gives our team a great head start. The next step is a 30-minute consultation with a the technology firm specialist, and you can pick a time that works for you at calendly dot com slash cloud systems. Thanks for calling the technology firm. Have a great day.
 
 If caller ID is missing or the caller says no, the agent asks for the best number, reads it back digit by digit, and accepts corrections.
 
@@ -279,7 +281,7 @@ If caller ID is missing or the caller says no, the agent asks for the best numbe
 - **New intents:** `confirm.yes`, `confirm.no`.
 - **Consultation Request:** asks "what can we help you with" across all four service lines.
 - **Project Follow-up:** chat still gets the clickable Calendly link; phone gets a spoken close via `outputAudioText` instead of the full URL read aloud.
-- **Backend:** new fast, model-free tags `greet-caller`, `offer-callback`, `confirm-callback` (`backend/contact.py`); discovery prompt now speaks as Cloud Systems Direct, covers cloud, web, app and marketing work, uses the caller's first name, and is written for a voice; Gemini failures now continue with a natural timeline question instead of a dead-end "try again?".
+- **Backend:** new fast, model-free tags `greet-caller`, `offer-callback`, `confirm-callback` (`backend/contact.py`); discovery prompt now speaks as the technology firm, covers cloud, web, app and marketing work, uses the caller's first name, and is written for a voice; Gemini failures now continue with a natural timeline question instead of a dead-end "try again?".
 - **Speed:** the Gemini client is created once per container instead of on every request, Gemini calls time out after 8 seconds, and the Dialogflow webhook timeout dropped from 30 to 10 seconds, so a stall falls back to the natural question instead of long silence.
 - **Tests:** `tests/test_webhook.py` (name cleanup, number readback, discovery and failure paths, and a check that every page, intent and webhook tag referenced in the flow exists). Run with `pip install -r requirements.txt -r requirements-dev.txt && python -m pytest -q`.
 
@@ -360,7 +362,7 @@ Built in response to the first v3 phone test ("too much talking, no link sent, n
 
 ### What the caller gets
 
-> **Agent:** Thanks for calling Cloud Systems Direct, your cloud, web, and marketing team. I'm the virtual assistant. Who am I speaking with?
+> **Agent:** Thanks for calling the technology firm, your cloud, web, and marketing team. I'm the virtual assistant. Who am I speaking with?
 > **Caller:** Maria.
 > **Agent:** Hi Maria. Is the number you're calling from, ending in 0 1 2 3, the best way to reach you?
 > **Caller:** Yes.
@@ -370,7 +372,7 @@ Built in response to the first v3 phone test ("too much talking, no link sent, n
 > **Caller:** Within two months.
 > **Agent:** Got it. Want me to text you a link to book a 30-minute consultation with our team?
 > **Caller:** Yes.
-> **Agent:** Done, it's on its way. Thanks for calling Cloud Systems Direct, Maria. Talk soon.
+> **Agent:** Done, it's on its way. Thanks for calling the technology firm, Maria. Talk soon.
 
 At the same moment, the owner gets a text and an email with the lead: name, callback number, request, follow-up answer, and Gemini summary.
 
@@ -619,7 +621,7 @@ judged on the phone; it does not fix model-generation latency or routing errors.
 
 ### October 29: Revised opening and reviewed policy answers (pending rollout)
 
-The new opening is: "Thanks for calling Cloud Systems Direct. Let's get your next
+The new opening is: "Thanks for calling the technology firm. Let's get your next
 project moving. I'm the virtual assistant." The next page asks for the caller's
 name. The generated Start Router package contains the new opening.
 
@@ -642,7 +644,7 @@ Studio Flow; deploying this code does not change the connector voice.
 ### Receptionist name: Maya (pending rollout)
 
 The owner requested a name for the phone receptionist. The opening now reads:
-"Hey there, and thank you for calling Cloud Systems Direct. I'm Maya.
+"Hey there, and thank you for calling the technology firm. I'm Maya.
 Great ideas deserve the right team behind them." The next page asks:
 "Who do I have the pleasure of speaking with today?" This is the approved
 opening, with the name question kept in its form prompt so it is spoken once.
