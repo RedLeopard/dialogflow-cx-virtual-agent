@@ -1616,6 +1616,38 @@
         font-size: 11px
       }
     }
+
+    /* Architecture overview: connected service map, with a compact mobile layout. */
+    .architecture-overview { border-bottom: 1px solid var(--line); background: radial-gradient(ellipse at 50% 20%, #31542920, transparent 70%); }
+    .architecture-overview .wrap { padding-block: 62px; }
+    .architecture-overview .section-heading { margin-bottom: 26px; }
+    .architecture-overview h2 { font-size: clamp(30px, 3.3vw, 43px); }
+    .system-map { margin: 0; border: 1px solid #c1fa6a30; border-radius: 12px; background: #0b120ee6; overflow: hidden; }
+    .map-toolbar { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 24px; border-bottom: 1px solid var(--line); font: 9px/1.6 var(--mono); letter-spacing: 1px; color: #a8bc9a; }
+    .map-legend { display: flex; gap: 18px; flex-wrap: wrap; }
+    .map-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .map-legend i { width: 6px; height: 6px; border-radius: 50%; background: #9dc577; }
+    .map-legend .ai-key { background: #b5a0d5; }
+    .map-legend .human-key { background: #cfb17e; }
+    .system-map svg { display: block; width: 100%; height: auto; font-family: 'DM Sans', Arial, sans-serif; }
+    .system-map .map-narrow { display: none; }
+    .map-edge { fill: none; stroke: #9dc577; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .map-return { stroke: #a2afa0; stroke-dasharray: 5 5; }
+    .map-title { fill: #eff3e9; font-weight: 600; text-anchor: middle; }
+    .map-service { fill: #c0ceb8; text-anchor: middle; }
+    .map-detail { fill: #94a88b; text-anchor: middle; }
+    .map-label { font: 12px 'DM Sans', Arial, sans-serif; fill: #b3c4a5; paint-order: stroke; stroke: #0b120e; stroke-width: 6px; stroke-linejoin: round; }
+    .system-map figcaption { border-top: 1px solid var(--line); padding: 17px 24px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: #a2afa0; font-size: 11px; line-height: 1.7; }
+    .system-map figcaption a { color: var(--lime); white-space: nowrap; }
+    @media (max-width: 700px) {
+      .architecture-overview .wrap { padding-block: 42px; }
+      .system-map .map-wide { display: none; }
+      .system-map .map-narrow { display: block; }
+      .map-toolbar { padding: 15px; font-size: 8px; }
+      .map-legend { gap: 12px; }
+      .system-map figcaption { padding: 15px; font-size: 11px; }
+      .map-label { font-size: 13px; }
+    }
   </style>
   <link href="assets/favicon.svg" rel="icon" type="image/svg+xml" />
 </head>
@@ -1693,6 +1725,107 @@
           STACK</span><strong>Twilio</strong><i>+</i><strong>Dialogflow CX</strong><i>+</i><strong>Cloud
           Run</strong><i>+</i><strong>Vertex AI</strong><i>+</i><strong>Python / FastAPI</strong></div>
     </div>
+
+    <section class="architecture-overview" id="architecture" aria-labelledby="architecture-overview-heading">
+      <div class="wrap">
+        <div class="section-heading">
+          <div><p class="eyebrow">SOLUTION ARCHITECTURE / AT A GLANCE</p>
+            <h2 id="architecture-overview-heading">One conversation.<br /><span>A connected cloud system.</span></h2></div>
+          <p>Twilio handles the call, Dialogflow CX manages the conversation, and authenticated Cloud Run fulfillment coordinates AI answers and customer actions.</p>
+        </div>
+        <figure class="system-map" aria-describedby="architecture-map-caption">
+          <div class="map-toolbar"><span>MAYA / SERVICE &amp; HANDOFF MAP</span><div class="map-legend"><span><i></i>Voice + actions</span><span><i class="ai-key"></i>AI</span><span><i class="human-key"></i>Human handoff</span></div></div>
+          <svg class="map-wide" viewBox="0 0 1146 450" role="img" aria-labelledby="map-wide-title map-wide-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="map-wide-title">Maya solution architecture</title>
+            <desc id="map-wide-desc">Twilio Voice and Studio connect calls to Maya in Dialogflow CX. Maya invokes authenticated FastAPI fulfillment on Cloud Run, which uses Gemini on Vertex AI and sends Twilio booking texts linking to Calendly. For live handoff, a Twilio Function screens the owner with press-1 acceptance. Accepted calls connect to the owner; unaccepted transfers return to Maya for message capture.</desc>
+            <defs>
+      <marker id="wide-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9 Z" fill="#9dc577"/></marker>
+      <marker id="wide-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#a2afa0"/></marker>
+    </defs><path class="map-edge" d="M258 110 H316" marker-end="url(#wide-arrow)"/><path class="map-edge" d="M544 110 H602" marker-end="url(#wide-arrow)"/><path class="map-edge" d="M830 110 H888" marker-end="url(#wide-arrow)" marker-start="url(#wide-arrow)"/><path class="map-edge" d="M430 162 V306" marker-end="url(#wide-arrow)"/><path class="map-edge" d="M544 358 H602" marker-end="url(#wide-arrow)"/><path class="map-edge" d="M716 162 V234 H1002 V306" marker-end="url(#wide-arrow)"/><path class="map-edge map-return" d="M366 306 V254 H286 V200 H366 V162" marker-end="url(#wide-return)"/><text class="map-label" x="449" y="227" text-anchor="start">Live handoff</text><text class="map-label" x="573" y="341" text-anchor="middle">Press 1</text><text class="map-label" x="850" y="220" text-anchor="middle">Booking link + alerts</text><text class="map-label" x="270" y="262" text-anchor="end">Return for message</text><g class="map-node">
+      <rect x="30" y="58" width="228" height="104" rx="12" fill="#142219" stroke="#699752" stroke-opacity=".8"/>
+      <text x="144.0" y="87" class="map-title" font-size="21">Phone calls</text>
+      <text x="144.0" y="109" class="map-service" font-size="15">Twilio Voice + Studio</text>
+      <text x="144.0" y="130" class="map-detail" font-size="12">Inbound voice</text>
+    </g><g class="map-node">
+      <rect x="316" y="58" width="228" height="104" rx="12" fill="#142219" stroke="#699752" stroke-opacity=".8"/>
+      <text x="430.0" y="87" class="map-title" font-size="21">Maya</text>
+      <text x="430.0" y="109" class="map-service" font-size="15">Dialogflow CX</text>
+      <text x="430.0" y="130" class="map-detail" font-size="12">Intake + conversation</text>
+    </g><g class="map-node">
+      <rect x="602" y="58" width="228" height="104" rx="12" fill="#142219" stroke="#699752" stroke-opacity=".8"/>
+      <text x="716.0" y="87" class="map-title" font-size="21">Backend</text>
+      <text x="716.0" y="109" class="map-service" font-size="15">FastAPI on Cloud Run</text>
+      <text x="716.0" y="130" class="map-detail" font-size="12">Authenticated fulfillment</text>
+    </g><g class="map-node">
+      <rect x="888" y="58" width="228" height="104" rx="12" fill="#211c32" stroke="#a18bc3" stroke-opacity=".8"/>
+      <text x="1002.0" y="87" class="map-title" font-size="21">AI answers</text>
+      <text x="1002.0" y="109" class="map-service" font-size="15">Gemini on Vertex AI</text>
+      <text x="1002.0" y="130" class="map-detail" font-size="12">Context + summaries</text>
+    </g><g class="map-node">
+      <rect x="316" y="306" width="228" height="104" rx="12" fill="#2a2419" stroke="#b69a63" stroke-opacity=".8"/>
+      <text x="430.0" y="335" class="map-title" font-size="21">Call screening</text>
+      <text x="430.0" y="357" class="map-service" font-size="15">Twilio Function</text>
+      <text x="430.0" y="378" class="map-detail" font-size="12">Private acceptance prompt</text>
+    </g><g class="map-node">
+      <rect x="602" y="306" width="228" height="104" rx="12" fill="#2a2419" stroke="#b69a63" stroke-opacity=".8"/>
+      <text x="716.0" y="335" class="map-title" font-size="21">Live transfer</text>
+      <text x="716.0" y="357" class="map-service" font-size="15">Owner’s phone</text>
+      <text x="716.0" y="378" class="map-detail" font-size="12">Connect after acceptance</text>
+    </g><g class="map-node">
+      <rect x="888" y="306" width="228" height="104" rx="12" fill="#142824" stroke="#65a795" stroke-opacity=".8"/>
+      <text x="1002.0" y="335" class="map-title" font-size="21">Booking texts</text>
+      <text x="1002.0" y="357" class="map-service" font-size="15">Twilio + Calendly</text>
+      <text x="1002.0" y="378" class="map-detail" font-size="12">Customer selects a time</text>
+    </g>
+          </svg>
+          <svg class="map-narrow" viewBox="0 0 420 700" role="img" aria-labelledby="map-narrow-title map-narrow-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="map-narrow-title">Maya solution architecture, mobile layout</title>
+            <desc id="map-narrow-desc">Twilio connects callers to Dialogflow CX. Cloud Run fulfillment uses Vertex AI and sends booking texts. A separate live-handoff path screens the owner with press-1 acceptance and returns unaccepted transfers to Maya.</desc>
+            <defs>
+      <marker id="narrow-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9 Z" fill="#9dc577"/></marker>
+      <marker id="narrow-return" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#a2afa0"/></marker>
+    </defs><path class="map-edge" d="M210 106 V152" marker-end="url(#narrow-arrow)"/><path class="map-edge" d="M210 240 V278 H102 V316" marker-end="url(#narrow-arrow)"/><path class="map-edge" d="M210 278 H318 V316" marker-end="url(#narrow-arrow)"/><path class="map-edge" d="M102 404 V450" marker-end="url(#narrow-arrow)" marker-start="url(#narrow-arrow)"/><path class="map-edge" d="M318 404 V450" marker-end="url(#narrow-arrow)"/><path class="map-edge" d="M14 360 H4 V628 H14" marker-end="url(#narrow-arrow)"/><path class="map-edge map-return" d="M406 360 H414 V196 H298" marker-end="url(#narrow-return)"/><text class="map-label" x="102" y="303" text-anchor="middle">Fulfillment</text><text class="map-label" x="318" y="303" text-anchor="middle">Live handoff</text><text class="map-label" x="318" y="435" text-anchor="middle">Press 1</text><text class="map-label" x="403" y="260" text-anchor="end">Unaccepted</text><g class="map-node">
+      <rect x="122" y="18" width="176" height="88" rx="12" fill="#142219" stroke="#699752" stroke-opacity=".8"/>
+      <text x="210.0" y="47" class="map-title" font-size="18">Phone calls</text>
+      <text x="210.0" y="69" class="map-service" font-size="14">Twilio Voice + Studio</text>
+      <text x="210.0" y="90" class="map-detail" font-size="12">Inbound voice</text>
+    </g><g class="map-node">
+      <rect x="122" y="152" width="176" height="88" rx="12" fill="#142219" stroke="#699752" stroke-opacity=".8"/>
+      <text x="210.0" y="181" class="map-title" font-size="18">Maya</text>
+      <text x="210.0" y="203" class="map-service" font-size="14">Dialogflow CX</text>
+      <text x="210.0" y="224" class="map-detail" font-size="12">Intake + conversation</text>
+    </g><g class="map-node">
+      <rect x="14" y="316" width="176" height="88" rx="12" fill="#142219" stroke="#699752" stroke-opacity=".8"/>
+      <text x="102.0" y="345" class="map-title" font-size="18">Backend</text>
+      <text x="102.0" y="367" class="map-service" font-size="14">Cloud Run + FastAPI</text>
+      <text x="102.0" y="388" class="map-detail" font-size="12">Authenticated webhook</text>
+    </g><g class="map-node">
+      <rect x="230" y="316" width="176" height="88" rx="12" fill="#2a2419" stroke="#b69a63" stroke-opacity=".8"/>
+      <text x="318.0" y="345" class="map-title" font-size="18">Call screening</text>
+      <text x="318.0" y="367" class="map-service" font-size="14">Twilio Function</text>
+      <text x="318.0" y="388" class="map-detail" font-size="12">Private press-1 prompt</text>
+    </g><g class="map-node">
+      <rect x="14" y="450" width="176" height="88" rx="12" fill="#211c32" stroke="#a18bc3" stroke-opacity=".8"/>
+      <text x="102.0" y="479" class="map-title" font-size="18">AI answers</text>
+      <text x="102.0" y="501" class="map-service" font-size="14">Vertex AI + Gemini</text>
+      <text x="102.0" y="522" class="map-detail" font-size="12">Context + summaries</text>
+    </g><g class="map-node">
+      <rect x="230" y="450" width="176" height="88" rx="12" fill="#2a2419" stroke="#b69a63" stroke-opacity=".8"/>
+      <text x="318.0" y="479" class="map-title" font-size="18">Live transfer</text>
+      <text x="318.0" y="501" class="map-service" font-size="14">Owner’s phone</text>
+      <text x="318.0" y="522" class="map-detail" font-size="12">Connect after acceptance</text>
+    </g><g class="map-node">
+      <rect x="14" y="584" width="176" height="88" rx="12" fill="#142824" stroke="#65a795" stroke-opacity=".8"/>
+      <text x="102.0" y="613" class="map-title" font-size="18">Booking texts</text>
+      <text x="102.0" y="635" class="map-service" font-size="14">Twilio + Calendly</text>
+      <text x="102.0" y="656" class="map-detail" font-size="12">Customer selects a time</text>
+    </g>
+          </svg>
+          <figcaption id="architecture-map-caption"><span>Solid lines show service calls and handoffs. The dashed path returns an unaccepted transfer to Maya for a message.</span><a href="#architecture-details">Explore the design decisions ↘</a></figcaption>
+        </figure>
+      </div>
+    </section>
+
     <section aria-labelledby="purpose-heading" class="section wrap purpose">
       <div>
         <p class="eyebrow">01 / THE CUSTOMER PROBLEM</p>
@@ -1873,7 +2006,7 @@
         <p aria-live="polite" class="sr-only" id="stage-status">Step 1 of 4: Contact</p>
       </div>
     </section>
-    <section class="section wrap" id="architecture">
+    <section class="section wrap" id="architecture-details">
       <div class="section-heading">
         <div>
           <p class="eyebrow">04 / THE PROJECT ARCHITECTURE</p>
