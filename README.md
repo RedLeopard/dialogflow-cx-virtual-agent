@@ -121,14 +121,11 @@ The real-model evaluator is `scripts/evaluate_conversation.py`. Deployment conte
 
 ## Next milestones
 
-1. Verify ignored, declined, and failed calls through the screened transfer, then check message context and delivery.
-2. **Add BigQuery for structured call and outcome history.** Define call/event IDs, timestamps, requested service, transfer attempts and results, message outcomes, SMS consent, and notification status. Capture accepted transfers from actual telephony results, rather than treating a handoff request as a successful connection. Deduplicate webhook retries.
-3. **Add Power BI for business reporting.** Build SQL views over the BigQuery events and use Import mode with scheduled refreshes for call volume, accepted-transfer rate, message outcomes, service demand, and follow-up needs. Keep personally identifying details out of the reporting views where they are unnecessary.
-4. **Connect activity to outcomes.** Use the reports to identify missed opportunities, improve handoff and message reliability, and prioritize follow-up. Record confirmed appointments only after a Calendly confirmation integration; sending a booking link alone is not a completed booking.
-5. Export the tested Studio JSON flow, verify email alerts, and continue real-call evaluation of recognition, corrections, interruptions, and the selected voice.
-6. Verify current secret mappings, per-secret IAM access, rotation, and caller-data retention. Resolve the configuration-key scanner finding before adding a narrow scanner exception or an enforced CI scanning workflow.
+1. **Full-call recording:** capture Maya conversations and live handoffs, with consent handling and restricted playback.
+2. **BigQuery:** store structured call events and outcomes for analysis.
+3. **Power BI:** report on call volume, transfer acceptance, service demand, and follow-up needs.
 
-**End-to-end goal:** capture an inquiry → understand the need → route the caller → preserve the outcome → measure what needs attention → improve the business response. BigQuery is the planned analytical history, and Power BI is the planned reporting layer. Neither is required to answer a call, and analytics collection should not delay the live conversation.
+**Purpose:** connect real caller interactions to measurable business outcomes and better follow-up.
 
 Message transcripts currently use Cloud Logging.
 
