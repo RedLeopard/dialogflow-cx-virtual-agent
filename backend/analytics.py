@@ -30,6 +30,11 @@ def _category(discovery):
     # Never put arbitrary model/caller text in aggregate event dimensions.
     kind = _text(discovery.get("project_type"), 200).lower()
     for category, pattern in (
+        ("customer_experience", r"\b(cx|c\s+x|customer experience|contact cent(?:er|re)|ccaas)\b"),
+        ("ai", r"\b(ai|artificial intelligence|machine learning|mlops|generative|agentic)\b"),
+        ("data", r"\b(data|database|analytics|etl|elt|warehouse|business intelligence)\b"),
+        ("devops", r"\b(devops|platform engineering|sre|site reliability|ci/cd)\b"),
+        ("cloud_security", r"\b(security|iam|identity|governance)\b"),
         ("cloud", r"\b(cloud|migration|infrastructure|devops|security)\b"),
         ("website", r"\b(web|website|wordpress|redesign)\b"),
         ("application", r"\b(app|application|software)\b"),
@@ -177,3 +182,4 @@ def write_records(events: list[dict], leads: list[dict]):
                 log("analytics_written", table=table, row_count=len(rows))
         except Exception as exc:
             log("analytics_failed", table=table, error_type=type(exc).__name__)
+

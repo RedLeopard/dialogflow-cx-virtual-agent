@@ -22,6 +22,17 @@ from backend import conversation
 
 
 SCENARIOS = [
+    ('CX engineering', ['Do you do CX engineering?']),
+    ('Spoken CX', ['I need help with C X engineering for our contact center.']),
+    ('Data migration', ['Can you migrate our database from SQL Server to BigQuery?']),
+    ('Agentic AI', ['Can you help us build an AI agent for internal workflows?']),
+    ('Cloud platform engineering', ['We need Kubernetes and deployment automation on Azure.']),
+    ('Cloud security', ['We need an IAM and cloud security assessment.']),
+    ('Cloud cost optimization', ['Can you help us lower our AWS cloud costs?']),
+    ('Unlisted cloud specialty', ['We have an edge computing and IoT project on Oracle Cloud.']),
+    ('Broad service overview', ['What cloud projects can your team discuss?']),
+    ('CX direct handoff', ['Can I talk to someone about customer experience engineering?']),
+    ('Data callback', ['Can someone call me back about a database migration?']),
     ('Service question', ['Do you redesign websites?']),
     ('No invented platform', ['My website keeps going down. Can you help?']),
     ('Correction and memory', [
@@ -81,10 +92,13 @@ def main():
             previous = result.discovery.model_dump()
         print()
     print('Review: Did it answer the question, avoid invented facts, retain corrections,')
-    print('and ask at most one useful question? An API success is not a quality pass.')
+    print('and ask at most one useful question? Did cloud, CX, AI, data and unlisted')
+    print('cloud inquiries reach an appropriate next step without unsupported promises?')
+    print('An API success is not a quality pass.')
     print(f'Requests: {requests}; errors: {failed}; slowest: {max(durations, default=0):.2f}s')
     return 1 if failed else 0
 
 
 if __name__ == '__main__':
     raise SystemExit(main())
+

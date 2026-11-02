@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[1] / "dialogflow" / "agent"
 FLOW_DIR = ROOT / "flows" / "Default Start Flow"
 
 # Intents managed by this script (system intents are left alone).
-MANAGED_INTENTS = ["confirm.yes", "confirm.no", "agent.handoff", "message.request"]
+MANAGED_INTENTS = ["consultation.request", "confirm.yes", "confirm.no", "agent.handoff", "message.request"]
 # Pages are created in this order; routes are filled in a second pass.
 MANAGED_PAGES = [
     "Start Router", "Caller Name", "Callback Number", "Alternate Number", "Confirm Callback",
@@ -231,3 +231,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

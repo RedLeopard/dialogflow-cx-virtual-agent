@@ -220,6 +220,28 @@ pages = [
 
 # ---------------------------------------------------------------- intents
 INTENTS = {
+    "consultation.request": [
+        "I would like to schedule a consultation", "Can I book a consultation?",
+        "I want to discuss a cloud project", "Can I speak with a cloud architect?",
+        "I need a consultation", "Schedule a discovery call",
+        "Do you do CX engineering?", "I need help with C X engineering",
+        "Can you help with customer experience engineering?",
+        "We need a contact center integration", "I need help with Amazon Connect",
+        "Can you build a conversational AI agent?", "I need help with Dialogflow CX",
+        "I have an artificial intelligence project", "Can you help with generative AI?",
+        "We want to build an AI agent", "I need AI automation for my business",
+        "We need a data migration", "Can you migrate our databases?",
+        "I need a data engineering pipeline", "Can you help with analytics and reporting?",
+        "We need to move from on premises to the cloud",
+        "I want to migrate between cloud providers", "We need cloud architecture help",
+        "Can you help with Azure infrastructure?", "I have an Oracle Cloud project",
+        "We need DevOps and deployment automation", "Can you help with Kubernetes?",
+        "I need a cloud security assessment", "We need disaster recovery planning",
+        "I want to lower our cloud costs", "We have a cloud networking project",
+        "I have a cloud project that is not on your list",
+        "Do you build websites?", "I need application development",
+        "Can you help with email marketing?",
+    ],
     "message.request": ["leave a message", "I'd like to leave a message", "can I leave a message",
                         "take a message", "please take a message for the team",
                         "have someone call me back", "I'd prefer a callback",
@@ -259,3 +281,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

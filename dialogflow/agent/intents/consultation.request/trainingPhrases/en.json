@@ -1,39 +1,364 @@
 {
-  "trainingPhrases": [ {
-    "parts": [ {
-      "text": "I would like to schedule a consultation"
-    } ],
-    "repeatCount": 1,
-    "languageCode": "en"
-  }, {
-    "parts": [ {
-      "text": "Can I book a consultation?"
-    } ],
-    "repeatCount": 1,
-    "languageCode": "en"
-  }, {
-    "parts": [ {
-      "text": "I want to discuss a cloud project"
-    } ],
-    "repeatCount": 1,
-    "languageCode": "en"
-  }, {
-    "parts": [ {
-      "text": "Can I speak with a cloud architect?"
-    } ],
-    "repeatCount": 1,
-    "languageCode": "en"
-  }, {
-    "parts": [ {
-      "text": "I need a consultation"
-    } ],
-    "repeatCount": 1,
-    "languageCode": "en"
-  }, {
-    "parts": [ {
-      "text": "Schedule a discovery call"
-    } ],
-    "repeatCount": 1,
-    "languageCode": "en"
-  } ]
+  "trainingPhrases": [
+    {
+      "id": "88f4a357-fe2a-5bc2-b234-b11a1e26b24e",
+      "parts": [
+        {
+          "text": "I would like to schedule a consultation"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b8c32f24-bc1a-5ff5-a63b-920636a54a2e",
+      "parts": [
+        {
+          "text": "Can I book a consultation?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "f2e25f7d-1680-5f70-9413-846d301e7e42",
+      "parts": [
+        {
+          "text": "I want to discuss a cloud project"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "8c9de686-d0ab-5673-99cd-7e724c92d9a0",
+      "parts": [
+        {
+          "text": "Can I speak with a cloud architect?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "9e1905f1-7628-5399-95db-132b90e4ea30",
+      "parts": [
+        {
+          "text": "I need a consultation"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "8c07e825-b01b-5348-8e37-bf4e5edfeb5b",
+      "parts": [
+        {
+          "text": "Schedule a discovery call"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "ecf7df0f-8c33-55c1-8d53-155f2a18e088",
+      "parts": [
+        {
+          "text": "Do you do CX engineering?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "56ee3fdc-67e1-50ba-9933-a1768c509461",
+      "parts": [
+        {
+          "text": "I need help with C X engineering"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "c677fe8b-6704-517a-b2b1-390d24982aa8",
+      "parts": [
+        {
+          "text": "Can you help with customer experience engineering?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "bee4f94c-962c-56d4-b0d5-1045d1715552",
+      "parts": [
+        {
+          "text": "We need a contact center integration"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "00631f2e-1077-5e1e-b56b-5044ddd1ac66",
+      "parts": [
+        {
+          "text": "I need help with Amazon Connect"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "9a9ca75c-3786-5b35-ba57-a3c3aef3b49e",
+      "parts": [
+        {
+          "text": "Can you build a conversational AI agent?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b12459cf-a62a-5b02-b18c-066fe8fc156c",
+      "parts": [
+        {
+          "text": "I need help with Dialogflow CX"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "4f2592b3-b50b-54a3-a7d2-c40276e03056",
+      "parts": [
+        {
+          "text": "I have an artificial intelligence project"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "82cdc9b0-77e5-5008-b69b-cf89b030e59e",
+      "parts": [
+        {
+          "text": "Can you help with generative AI?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "0bb2f3df-3ec4-5b0f-a7a8-e1fb51c600dc",
+      "parts": [
+        {
+          "text": "We want to build an AI agent"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b839fd38-9e0c-51bd-a0ce-d9c6383a9ae5",
+      "parts": [
+        {
+          "text": "I need AI automation for my business"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "51d56681-20aa-5096-b00f-8cb04c74ab60",
+      "parts": [
+        {
+          "text": "We need a data migration"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "38836e9b-e965-516e-94e8-56be7ed5541c",
+      "parts": [
+        {
+          "text": "Can you migrate our databases?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "3c2baf3f-7d88-5f35-b620-5eecd6457448",
+      "parts": [
+        {
+          "text": "I need a data engineering pipeline"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "4f9d7718-0b30-5bc4-bd89-e403a6f11d5e",
+      "parts": [
+        {
+          "text": "Can you help with analytics and reporting?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "95034f25-d4f3-5c86-a5e2-daf3ace25a84",
+      "parts": [
+        {
+          "text": "We need to move from on premises to the cloud"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "bbb4cb1e-d451-52de-8004-39103a551721",
+      "parts": [
+        {
+          "text": "I want to migrate between cloud providers"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "ff28188d-ea2b-5f94-8c71-142d0ee20c05",
+      "parts": [
+        {
+          "text": "We need cloud architecture help"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "8b124e53-7c9b-596d-bed8-d7b0178094d1",
+      "parts": [
+        {
+          "text": "Can you help with Azure infrastructure?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "59158446-743c-56d7-a05c-6137ec70a3a4",
+      "parts": [
+        {
+          "text": "I have an Oracle Cloud project"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "85bed6f9-ef1d-5ba1-b1cf-f32af9983ed7",
+      "parts": [
+        {
+          "text": "We need DevOps and deployment automation"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "4e363751-87bc-5d3b-b6f4-08b8a1c3721e",
+      "parts": [
+        {
+          "text": "Can you help with Kubernetes?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "2588eb8f-7f28-5d5a-b350-080b8f072b43",
+      "parts": [
+        {
+          "text": "I need a cloud security assessment"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "16228faa-076d-5782-8600-30c0a71c9f1a",
+      "parts": [
+        {
+          "text": "We need disaster recovery planning"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "1f42e4ea-004c-5dca-9d2a-1c027d626836",
+      "parts": [
+        {
+          "text": "I want to lower our cloud costs"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "a4a0bcf5-201b-593b-953e-7282ba8966f4",
+      "parts": [
+        {
+          "text": "We have a cloud networking project"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "b7c6667f-393a-54ae-bfe3-7e6895831764",
+      "parts": [
+        {
+          "text": "I have a cloud project that is not on your list"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "4ed92604-e66c-50bb-a63e-26c653c5bdaf",
+      "parts": [
+        {
+          "text": "Do you build websites?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "49928f7c-f785-5c8f-bf2a-5f161d758016",
+      "parts": [
+        {
+          "text": "I need application development"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    },
+    {
+      "id": "fa0c6d44-3d7b-5355-9c90-82e565dd5bbe",
+      "parts": [
+        {
+          "text": "Can you help with email marketing?"
+        }
+      ],
+      "repeatCount": 1,
+      "languageCode": "en"
+    }
+  ]
 }

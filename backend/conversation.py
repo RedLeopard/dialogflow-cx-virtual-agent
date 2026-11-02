@@ -7,19 +7,9 @@ from google.genai import types
 from pydantic import BaseModel, Field
 
 from backend.discovery import ProjectDiscovery, _client
+from backend.services import INQUIRY_GUIDANCE, PROJECT_TYPE_GUIDANCE, SERVICE_FACTS
 import os
 
-
-# Limited to service areas already documented in this repository. Add verified
-# company facts here; do not let the model invent prices, schedules or guarantees.
-SERVICE_FACTS = """
-Cloud Systems Direct offers cloud consulting and migrations, website development
-and redesign, app development, and digital marketing including social media,
-advertising, search engine optimization and email marketing.
-Customers can book a 30-minute consultation using a booking link.
-Prices, project delivery dates, staff availability, certifications, named client
-results, emergency support coverage and service guarantees are not supplied.
-"""
 
 INSTRUCTION = """
 You are Cloud Systems Direct's phone receptionist and project discovery assistant.
@@ -34,7 +24,9 @@ Use only the supplied SERVICE_FACTS for claims about the company. You may explai
 general technical concepts and suggest a sensible assessment step, clearly as a
 possibility, without diagnosing an unseen system or promising a solution.
 For missing company facts say the team must confirm. Never invent a price,
-deadline, business hours, capability beyond the supplied services, or guarantee.
+deadline, business hours, confirmed implementation capability, or guarantee.
+The supplied inquiry areas are intentionally broad and non-exhaustive; accepting
+a project discussion does not mean guaranteeing delivery of every requested tool.
 Unknown pricing is NOT evidence that we have no set prices or that prices vary.
 Say 'Our team will need to confirm the price' without inventing a pricing policy.
 Do not claim a text was sent, lead saved, person connected or appointment booked.
@@ -75,10 +67,9 @@ Action requests do NOT mean any external action has succeeded.
 
 discovery must summarize the entire conversation accurately, with corrections
 applied. Extract only caller-provided information. Use null for unknown fields,
-[] for unknown requirements. project_type is cloud, website, app, marketing or
-other. Preserve relative dates. follow_up_question is the next useful question
+[] for unknown requirements. Preserve relative dates. follow_up_question is the next useful question
 or 'Would you like to arrange a consultation?' if moving to booking.
-"""
+""" + '\n' + INQUIRY_GUIDANCE + '\n' + PROJECT_TYPE_GUIDANCE
 
 
 class ConversationTurn(BaseModel):
@@ -157,3 +148,4 @@ def generate_turn(utterance: str, history: list[dict], previous: dict | None,
         if result.reply.count('?') > 1:
             raise ValueError('More than one follow-up question')
     return result
+
