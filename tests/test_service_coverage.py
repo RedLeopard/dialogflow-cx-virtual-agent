@@ -95,3 +95,61 @@ def test_generated_service_intent_is_deployable_and_free_text_intake_stays_open(
     pages = {p['displayName']: p for p in build_agent.pages}
     for name in ('Consultation Request', 'Project Follow-up'):
         assert pages[name]['form']['parameters'][0]['entityType'] == '@sys.any'
+
+
+def test_service_only_deployment_touches_only_existing_inquiry_intent(monkeypatch):
+    from scripts import apply_agent
+
+    calls = []
+    monkeypatch.setattr('sys.argv', ['apply_agent.py', '--service-coverage-only'])
+    monkeypatch.setattr(apply_agent, 'list_all', lambda path, key: [
+        {'displayName': 'consultation.request', 'name': 'intents/existing-inquiry'}])
+    monkeypatch.setattr(apply_agent, 'call', lambda *a, **k: calls.append((a, k)))
+    monkeypatch.setattr(apply_agent, 'publish', lambda: pytest.fail('Unrequested publish'))
+    apply_agent.main()
+    assert len(calls) == 1
+    args, _ = calls[0]
+    assert args[0:2] == ('PATCH', 'intents/existing-inquiry')
+    assert args[3] == 'updateMask=trainingPhrases'
+    assert 'form' not in args[2] and 'transitionRoutes' not in args[2]
+
+
+def test_service_only_deployment_rejects_missing_intent_before_writing(monkeypatch):
+    from scripts import apply_agent
+
+    monkeypatch.setattr('sys.argv', ['apply_agent.py', '--service-coverage-only', '--publish'])
+    monkeypatch.setattr(apply_agent, 'list_all', lambda *a: [])
+    monkeypatch.setattr(apply_agent, 'call', lambda *a, **k: pytest.fail('Unexpected cloud write'))
+    with pytest.raises(SystemExit, match='consultation.request is missing'):
+        apply_agent.main()
+
+
+def test_service_only_dry_run_does_not_mutate_cloud_or_claim_live(monkeypatch, capsys):
+    from scripts import apply_agent
+
+    reads = []
+    monkeypatch.setattr(apply_agent, 'DRY_RUN', False)
+    monkeypatch.setattr('sys.argv', ['apply_agent.py', '--service-coverage-only', '--dry-run', '--publish'])
+    monkeypatch.setattr(apply_agent, 'list_all', lambda path, key: [
+        {'displayName': 'consultation.request', 'name': 'intents/existing-inquiry'}])
+    monkeypatch.setattr(apply_agent, 'token', lambda: 'not-a-real-token')
+
+    class Response:
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def read(self):
+            return b'{"versionConfigs": [{"version": "versions/old"}]}'
+
+    def urlopen(request, **kwargs):
+        assert request.get_method() == 'GET'
+        reads.append(request.full_url)
+        return Response()
+
+    monkeypatch.setattr(apply_agent.urllib.request, 'urlopen', urlopen)
+    apply_agent.main()
+    output = capsys.readouterr().out
+    assert len(reads) == 1 and '/environments/' in reads[0]
+    assert 'production was not changed' in output
+    assert 'LIVE:' not in output

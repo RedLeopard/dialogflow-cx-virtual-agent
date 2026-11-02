@@ -9,6 +9,8 @@ Usage (from the repo root, logged in with gcloud):
     python3 scripts/apply_agent.py --dry-run        # show what would change
     python3 scripts/apply_agent.py                  # update Draft only
     python3 scripts/apply_agent.py --publish        # update Draft, publish, go live
+    python3 scripts/apply_agent.py --service-coverage-only --publish
+        # update only inquiry training phrases, then publish the existing flow
 
 Rollback: point production back at the previous version (printed at the end).
 Standard library only.
@@ -144,11 +146,35 @@ def wait(operation, label):
     sys.exit(f"ERROR: timed out waiting for {label}")
 
 
+def publish():
+    """Version the existing flow, retaining its current page and route wiring."""
+    print("\nPublish")
+    env = call("GET", f"{AGENT}/environments/{ENVIRONMENT_ID}")
+    previous = env.get("versionConfigs", [{}])[0].get("version", "unknown")
+    label = time.strftime("caller-experience-%Y%m%d-%H%M")
+    op = call("POST", f"{FLOW}/versions", {
+        "displayName": label,
+        "description": "Cloud Systems Direct greeting, contact intake, voice-ready discovery.",
+    })
+    version = wait(op, f"version {label}").get("name", f"{FLOW}/versions/DRY-RUN")
+    print(f"  created {version.rsplit('/', 1)[-1]} ({label})")
+    op = call("PATCH", f"{AGENT}/environments/{ENVIRONMENT_ID}",
+              {"versionConfigs": [{"version": version}]}, "updateMask=versionConfigs")
+    wait(op, "production switch")
+    if DRY_RUN:
+        print("\nDry-run only: no version was published and production was not changed.")
+        return
+    print(f"\nLIVE: production now runs version {version.rsplit('/', 1)[-1]}.")
+    print(f"Rollback: production previously ran version {previous.rsplit('/', 1)[-1]}.")
+
+
 def main():
     global DRY_RUN
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dry-run", action="store_true", help="show changes without making them")
     parser.add_argument("--publish", action="store_true", help="create a version and make it live in production")
+    parser.add_argument("--service-coverage-only", action="store_true",
+                        help="update only the existing consultation inquiry training phrases; preserve page, route and webhook configuration")
     args = parser.parse_args()
     DRY_RUN = args.dry_run
 
@@ -157,7 +183,10 @@ def main():
     # 1. Intents -------------------------------------------------------------
     print("Intents")
     intents = {i["displayName"]: i["name"] for i in list_all(f"{AGENT}/intents", "intents")}
-    for name in MANAGED_INTENTS:
+    managed_intents = ["consultation.request"] if args.service_coverage_only else MANAGED_INTENTS
+    for name in managed_intents:
+        if args.service_coverage_only and name not in intents:
+            sys.exit("ERROR: consultation.request is missing; service-only deployment requires an existing agent setup.")
         phrases = load(ROOT / "intents" / name / "trainingPhrases" / "en.json")["trainingPhrases"]
         body = {
             "displayName": name,
@@ -170,6 +199,14 @@ def main():
         else:
             print(f"  create {name}")
             intents[name] = call("POST", f"{AGENT}/intents", body)["name"]
+
+    if args.service_coverage_only:
+        print("\nService inquiry training phrases processed; page, route and webhook configuration preserved.")
+        if args.publish:
+            publish()
+        else:
+            print("Use --service-coverage-only --publish to make the inquiry update live.")
+        return
 
     # 2. Webhook timeout -------------------------------------------------------
     print("Webhook")
@@ -211,22 +248,7 @@ def main():
         print("Draft only. Re-run with --publish to make it live on the phone line.")
         return
 
-    # 5. Publish ---------------------------------------------------------------
-    print("\nPublish")
-    env = call("GET", f"{AGENT}/environments/{ENVIRONMENT_ID}")
-    previous = env.get("versionConfigs", [{}])[0].get("version", "unknown")
-    label = time.strftime("caller-experience-%Y%m%d-%H%M")
-    op = call("POST", f"{FLOW}/versions", {
-        "displayName": label,
-        "description": "Cloud Systems Direct greeting, contact intake, voice-ready discovery.",
-    })
-    version = wait(op, f"version {label}").get("name", f"{FLOW}/versions/DRY-RUN")
-    print(f"  created {version.rsplit('/', 1)[-1]} ({label})")
-    op = call("PATCH", f"{AGENT}/environments/{ENVIRONMENT_ID}",
-              {"versionConfigs": [{"version": version}]}, "updateMask=versionConfigs")
-    wait(op, "production switch")
-    print(f"\nLIVE: production now runs version {version.rsplit('/', 1)[-1]}.")
-    print(f"Rollback: production previously ran version {previous.rsplit('/', 1)[-1]}.")
+    publish()
 
 
 if __name__ == "__main__":
