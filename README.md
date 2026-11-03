@@ -4,9 +4,9 @@ A business phone solution for **a working technology firm**, designed and built 
 
 The business purpose is to turn an incoming inquiry into an actionable next step, preserve context for the person responding, and make follow-up measurable. BigQuery is now part of the project: the dataset, lead and event tables, reporting views, and backend ingestion are deployed. Power BI is the next milestone. The first live database write remains to be verified.
 
-**Checkpoint: November 1, 2026.** The owner confirmed the press-1 transfer now works after correcting the destination number. The published Studio flow routes unaccepted transfers back to Maya for message capture; decline/no-answer checks and end-to-end message delivery remain to be verified.
+**Checkpoint: November 2, 2026.** The owner confirmed the press-1 transfer now works after correcting the destination number. The published Studio flow routes unaccepted transfers back to Maya for message capture; decline/no-answer checks and end-to-end message delivery remain to be verified.
 
-BigQuery ingestion is deployed in Cloud Run revision `cx-backend-00006-ml5`, serving 100% of traffic. The dataset is `csd-dialogflow-cx-2026.maya_analytics` in `us-central1`.
+The November 2 backend deployment is serving 100% of Cloud Run traffic, and the expanded Dialogflow service-inquiry configuration has been published to production, as confirmed by the owner's Terminal output. Real-call checks for the broader inquiry coverage remain pending. BigQuery ingestion is included in the backend; its first live database write remains unverified.
 
 ## Phone flow
 
@@ -19,11 +19,11 @@ BigQuery ingestion is deployed in Cloud Run revision `cx-backend-00006-ml5`, ser
 | Area | Status |
 | --- | --- |
 | Phone intake | Branded greeting, caller name, and callback confirmation exercised on calls. |
-| Conversation | Contextual discovery, corrections, and service answers implemented and evaluated. |
+| Conversation | Expanded inquiry guidance deployed for cloud engineering, AI, data migrations, CX/contact centers, DevOps, security, and unlisted cloud specialties. Real-call verification of this update remains pending. |
 | Booking and alerts | Booking-link and owner-alert texts received. Customers schedule in Calendly. |
 | Live transfer | Owner confirmed the press-1 transfer works after correcting the destination number. |
 | Missed-call messages | Studio Return is connected to Maya; unanswered return was previously observed. Decline/no-answer screening checks and full message delivery remain unverified. |
-| Analytics | BigQuery event and lead tables, reporting views, and Cloud Run ingestion deployed. Dataset access granted to the backend identity; 74 offline tests passed. The first live write remains unverified. |
+| Analytics | BigQuery event and lead tables, reporting views, and Cloud Run ingestion deployed. Dataset access granted to the backend identity; 88 offline tests passed. The first live write remains unverified. |
 
 ## Architecture
 
@@ -103,11 +103,12 @@ These observations are bounded evidence, not a guarantee of complete security. C
 | Oct 30 | Confirmed a working cell transfer and added the transfer-status split in Studio. |
 | Oct 31–Nov 1 | Added protected call screening, published the Return route to Maya, corrected the owner destination, and confirmed the press-1 transfer works. |
 | Nov 1 | Created BigQuery event/lead tables and reporting views, granted dataset access, and deployed backend ingestion to Cloud Run. |
+| Nov 2 | Broadened cloud, CX, AI, and data inquiry coverage; deployed the backend and published the inquiry-intent update while preserving existing page and handoff configuration. |
 
 ## Validation
 
-- **74 offline tests** passed, including analytics row construction, identity, consent, retry IDs, outcome semantics, and failure isolation. Model responses, notifications, and database writes are mocked.
-- **13 real Vertex requests** completed with zero errors and **1.20–5.32 seconds per generation** in one evaluation. Follow-up fixes constrained unsupported policy answers; these timings do not measure full calls.
+- **88 offline tests** passed, including analytics, shared inquiry guidance, broader service categories, webhook routing, and service-only deployment safeguards. Model responses, notifications, and database writes are mocked; these checks do not establish live model response quality.
+- **Earlier evaluation, before the November 2 inquiry update:** 13 real Vertex requests completed with zero errors and **1.20–5.32 seconds per generation** in one evaluation. Follow-up fixes constrained unsupported policy answers; these timings do not measure full calls.
 - **Phone checks:** owner-confirmed press-1 transfer, previously observed unanswered return to Maya, and received booking/handoff texts. The new screening route still needs decline/no-answer checks and a complete message-delivery test.
 
 Run the offline checks from the repository root:
